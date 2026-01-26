@@ -126,10 +126,10 @@ export default async function HomePage() {
                         <div className={`${index === 0 ? "p-10" : "p-8"} flex flex-col justify-center`}>
                           <h3 className={`${index === 0 ? "text-3xl" : "text-2xl"} font-semibold text-text-primary mb-4`}>{dev.name}</h3>
 
-                          {dev.location && (
+                          {dev.area && (
                             <div className="flex items-start gap-2 mb-4 text-text-secondary">
                               <MapPin size={20} className="text-primary-blue flex-shrink-0 mt-0.5" />
-                              <span className="font-medium">{dev.location}</span>
+                              <span className="font-medium">{dev.area}</span>
                             </div>
                           )}
 
