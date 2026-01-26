@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-background text-text-primary font-sans font-medium;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif;
+  }
+
+  h1 {
+    @apply text-4xl font-semibold leading-tight tracking-normal;
+  }
+
+  h2 {
+    @apply text-3xl font-semibold leading-snug tracking-normal;
+  }
+
+  h3 {
+    @apply text-2xl font-semibold leading-normal tracking-normal;
+  }
+
+  h4 {
+    @apply text-xl font-semibold leading-normal tracking-normal;
+  }
+
+  p {
+    @apply text-base leading-relaxed font-medium;
+  }
+}
+
+@layer components {
+  .container-custom {
+    @apply max-w-7xl mx-auto px-6 lg:px-8;
+  }
+  
+  .card {
+    @apply bg-card border border-border rounded-lg shadow-sm transition-all duration-200;
+  }
+  
+  .card:hover {
+    @apply shadow-md scale-[1.01];
+  }
+  
+  .btn-primary {
+    @apply bg-primary-blue text-white rounded-lg px-6 py-3 font-semibold transition-all duration-200;
+  }
+
+  .btn-primary:hover {
+    @apply bg-primary-blue-hover shadow-md scale-[1.02];
+  }
+
+  .btn-secondary {
+    @apply border-2 border-primary-blue text-primary-blue rounded-lg px-6 py-3 font-semibold transition-all duration-200;
+  }
+
+  .btn-secondary:hover {
+    @apply bg-primary-blue-hover border-primary-blue-hover text-white;
+  }
+
+  .input-field {
+    @apply border border-border rounded-lg px-4 py-3 w-full focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-primary-blue;
+  }
+  
+  .badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium;
+  }
+}
