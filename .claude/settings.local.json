@@ -3,7 +3,8 @@
     "allow": [
       "Bash(npx create-next-app:*)",
       "Bash(npx tailwindcss:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(npm install:*)"
     ]
   }
 }
