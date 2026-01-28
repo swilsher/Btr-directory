@@ -50,6 +50,10 @@ export interface Development {
   amenities_other?: string;
   is_featured?: boolean;
   is_published?: boolean;
+  verified?: boolean;
+  verified_at?: string;
+  verification_notes?: string;
+  flagged_for_review?: boolean;
   asset_owner?: AssetOwner;
   operator?: Operator;
 }

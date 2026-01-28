@@ -2,8 +2,8 @@ import Link from 'next/link';
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
 import { Development } from '@/types/database';
-import { formatNumber, getFriendlyStatus, getStatusColor } from '@/lib/utils';
-import { MapPin, Building2, User, Calendar } from 'lucide-react';
+import { formatNumber, getFriendlyStatus, getStatusColor, formatVerifiedDate } from '@/lib/utils';
+import { MapPin, Building2, User, Calendar, CheckCircle } from 'lucide-react';
 
 interface DevelopmentCardProps {
   development: Development;
@@ -87,6 +87,16 @@ export default function DevelopmentCard({ development }: DevelopmentCardProps) {
               {development.amenity_concierge && (
                 <span className="text-xs bg-primary-blue-light text-primary-blue px-2 py-1 rounded">Concierge</span>
               )}
+            </div>
+          )}
+
+          {/* Verification badge */}
+          {development.verified && development.verified_at && (
+            <div className="mt-3 pt-3 border-t border-border">
+              <div className="flex items-center gap-1.5 text-xs text-gray-500">
+                <CheckCircle size={12} className="text-green-600" />
+                <span>{formatVerifiedDate(development.verified_at)}</span>
+              </div>
             </div>
           )}
         </div>

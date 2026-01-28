@@ -4,7 +4,14 @@
       "Bash(npx create-next-app:*)",
       "Bash(npx tailwindcss:*)",
       "Bash(npx tsc:*)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(if [ -f .env.local ])",
+      "Bash(then echo \"=== .env.local exists ===\")",
+      "Bash(else echo \".env.local not found\")",
+      "Bash(fi)",
+      "Bash(npm run build:*)",
+      "Bash(grep:*)",
+      "Bash(tail:*)"
     ]
   }
 }

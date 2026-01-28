@@ -71,3 +71,13 @@ export function truncateText(text: string, maxLength: number): string {
   if (text.length <= maxLength) return text;
   return text.slice(0, maxLength).trim() + '...';
 }
+
+export function formatVerifiedDate(timestamp: string | null | undefined): string | null {
+  if (!timestamp) return null;
+
+  const date = new Date(timestamp);
+  const month = date.toLocaleString('en-GB', { month: 'long' });
+  const year = date.getFullYear();
+
+  return `Verified ${month} ${year}`;
+}

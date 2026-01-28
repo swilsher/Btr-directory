@@ -7,8 +7,8 @@ import Button from '@/components/ui/Button';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { Development } from '@/types/database';
-import { formatNumber, formatCurrency, formatDate, getFriendlyStatus, getStatusColor } from '@/lib/utils';
-import { MapPin, Calendar, Building2, DollarSign, Home, Check, ExternalLink, User, Briefcase } from 'lucide-react';
+import { formatNumber, formatCurrency, formatDate, getFriendlyStatus, getStatusColor, formatVerifiedDate } from '@/lib/utils';
+import { MapPin, Calendar, Building2, DollarSign, Home, Check, ExternalLink, User, Briefcase, CheckCircle } from 'lucide-react';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -136,9 +136,17 @@ export default async function DevelopmentPage({ params }: PageProps) {
                   </div>
                 )}
               </div>
-              <Badge className={`${getStatusColor(development.status)} text-base px-4 py-2`}>
-                {getFriendlyStatus(development.status)}
-              </Badge>
+              <div className="flex flex-col items-end gap-2">
+                <Badge className={`${getStatusColor(development.status)} text-base px-4 py-2`}>
+                  {getFriendlyStatus(development.status)}
+                </Badge>
+                {development.verified && development.verified_at && (
+                  <div className="flex items-center gap-1.5 text-sm text-gray-600">
+                    <CheckCircle size={14} className="text-green-600" />
+                    <span>{formatVerifiedDate(development.verified_at)}</span>
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className="flex flex-wrap gap-3">
@@ -208,39 +216,6 @@ export default async function DevelopmentPage({ params }: PageProps) {
                   )}
                 </div>
               </div>
-
-              {/* Unit Mix */}
-              {(development.studio_units || development.one_bed_units || development.two_bed_units || development.three_bed_plus_units) && (
-                <div className="bg-white rounded-lg border border-border p-6">
-                  <h2 className="text-2xl font-semibold mb-4">Unit Mix</h2>
-                  <div className="space-y-3">
-                    {development.studio_units && (
-                      <div className="flex justify-between items-center">
-                        <span className="text-text-secondary">Studio</span>
-                        <span className="font-semibold">{formatNumber(development.studio_units)} units</span>
-                      </div>
-                    )}
-                    {development.one_bed_units && (
-                      <div className="flex justify-between items-center">
-                        <span className="text-text-secondary">1 Bedroom</span>
-                        <span className="font-semibold">{formatNumber(development.one_bed_units)} units</span>
-                      </div>
-                    )}
-                    {development.two_bed_units && (
-                      <div className="flex justify-between items-center">
-                        <span className="text-text-secondary">2 Bedroom</span>
-                        <span className="font-semibold">{formatNumber(development.two_bed_units)} units</span>
-                      </div>
-                    )}
-                    {development.three_bed_plus_units && (
-                      <div className="flex justify-between items-center">
-                        <span className="text-text-secondary">3+ Bedroom</span>
-                        <span className="font-semibold">{formatNumber(development.three_bed_plus_units)} units</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
 
               {/* Amenities */}
               {amenities.length > 0 && (
