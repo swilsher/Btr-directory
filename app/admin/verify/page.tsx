@@ -2,8 +2,9 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
-import { Development } from '@/types/database';
+import { Development, Operator, AssetOwner } from '@/types/database';
 import { CheckCircle, Save, SkipForward, Flag, ChevronLeft, ExternalLink, Loader2 } from 'lucide-react';
+import { Autocomplete } from '@/components/ui/Autocomplete';
 
 const ADMIN_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || 'btr2025admin';
 
@@ -83,6 +84,10 @@ export default function AdminVerifyPage() {
   const [verifiedCount, setVerifiedCount] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
 
+  // Autocomplete data
+  const [operators, setOperators] = useState<Array<{ id: string; name: string }>>([]);
+  const [assetOwners, setAssetOwners] = useState<Array<{ id: string; name: string }>>([]);
+
   useEffect(() => {
     const auth = sessionStorage.getItem('admin_authenticated');
     if (auth === 'true') {
@@ -94,6 +99,8 @@ export default function AdminVerifyPage() {
     if (isAuthenticated) {
       fetchDevelopments();
       fetchStats();
+      fetchOperators();
+      fetchAssetOwners();
     }
   }, [isAuthenticated, verificationFilter, monthFilter, regionFilter, typeFilter, searchQuery]);
 
@@ -153,13 +160,41 @@ export default function AdminVerifyPage() {
     setTotalCount(total || 0);
   };
 
+  const fetchOperators = async () => {
+    const { data, error } = await supabase
+      .from('operators')
+      .select('id, name')
+      .order('name', { ascending: true });
+
+    if (error) {
+      console.error('Error fetching operators:', error);
+      return;
+    }
+
+    setOperators(data || []);
+  };
+
+  const fetchAssetOwners = async () => {
+    const { data, error } = await supabase
+      .from('asset_owners')
+      .select('id, name')
+      .order('name', { ascending: true });
+
+    if (error) {
+      console.error('Error fetching asset owners:', error);
+      return;
+    }
+
+    setAssetOwners(data || []);
+  };
+
   const fetchDevelopments = async () => {
     console.log('=== FETCHING DEVELOPMENTS ===');
     setLoading(true);
     try {
       let query = supabase
         .from('developments')
-        .select('*, operator:operators(name), asset_owner:asset_owners(name)')
+        .select('*, operator:operators(id, name), asset_owner:asset_owners(id, name)')
         .eq('is_published', true);
 
       // Apply filters
@@ -234,6 +269,78 @@ export default function AdminVerifyPage() {
     setEditedData(prev => ({ ...prev, [field]: value }));
     setHasUnsavedChanges(true);
     setSaveStatus('unsaved');
+  };
+
+  const handleOperatorChange = async (operatorId: string | null, operatorName: string | null) => {
+    if (operatorId) {
+      // Existing operator selected
+      handleFieldChange('operator_id', operatorId);
+    } else if (operatorName) {
+      // New operator - create it first
+      try {
+        const slug = operatorName.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+
+        const { data, error } = await supabase
+          .from('operators')
+          .insert({ name: operatorName.trim(), slug })
+          .select('id')
+          .single();
+
+        if (error) {
+          console.error('Error creating operator:', error);
+          alert('Failed to create new operator');
+          return;
+        }
+
+        // Update with new operator ID
+        handleFieldChange('operator_id', data.id);
+
+        // Refresh operators list
+        fetchOperators();
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Failed to create new operator');
+      }
+    } else {
+      // Cleared
+      handleFieldChange('operator_id', null);
+    }
+  };
+
+  const handleAssetOwnerChange = async (ownerId: string | null, ownerName: string | null) => {
+    if (ownerId) {
+      // Existing asset owner selected
+      handleFieldChange('asset_owner_id', ownerId);
+    } else if (ownerName) {
+      // New asset owner - create it first
+      try {
+        const slug = ownerName.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+
+        const { data, error } = await supabase
+          .from('asset_owners')
+          .insert({ name: ownerName.trim(), slug })
+          .select('id')
+          .single();
+
+        if (error) {
+          console.error('Error creating asset owner:', error);
+          alert('Failed to create new asset owner');
+          return;
+        }
+
+        // Update with new asset owner ID
+        handleFieldChange('asset_owner_id', data.id);
+
+        // Refresh asset owners list
+        fetchAssetOwners();
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Failed to create new asset owner');
+      }
+    } else {
+      // Cleared
+      handleFieldChange('asset_owner_id', null);
+    }
   };
 
   const handleSaveChanges = async (showStatus = true) => {
@@ -601,10 +708,26 @@ export default function AdminVerifyPage() {
 
                 {/* Operator */}
                 <div>
-                  <label className="text-xs text-gray-500 font-medium">Operator</label>
-                  <div className="text-sm text-gray-700 mt-1 px-3 py-2 bg-gray-50 rounded-lg">
-                    {currentDevelopment.operator?.name || 'Not assigned'}
-                  </div>
+                  <Autocomplete
+                    label="Operator"
+                    options={operators}
+                    value={getFieldValue('operator_id')}
+                    onChange={handleOperatorChange}
+                    placeholder="Select or add operator..."
+                    allowCustom={true}
+                  />
+                </div>
+
+                {/* Asset Owner */}
+                <div>
+                  <Autocomplete
+                    label="Asset Owner"
+                    options={assetOwners}
+                    value={getFieldValue('asset_owner_id')}
+                    onChange={handleAssetOwnerChange}
+                    placeholder="Select or add asset owner..."
+                    allowCustom={true}
+                  />
                 </div>
 
                 {/* Units */}
