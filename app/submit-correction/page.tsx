@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import Button from '@/components/ui/Button';
-import { supabase } from '@/lib/supabase';
 import { AlertCircle, CheckCircle } from 'lucide-react';
 
 interface CorrectionFormData {
@@ -31,19 +30,23 @@ export default function SubmitCorrectionPage() {
     setErrorMessage('');
 
     try {
-      const { error } = await supabase
-        .from('correction_requests')
-        .insert([{
-          request_type: data.requestType,
-          user_name: data.userName,
-          user_email: data.userEmail,
-          message: data.requestType === 'missing_site' && data.developmentName
-            ? `Development Name: ${data.developmentName}\n\n${data.message}`
-            : data.message,
-          status: 'pending',
-        }]);
+      const response = await fetch('/api/correction', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          requestType: data.requestType,
+          userName: data.userName,
+          userEmail: data.userEmail,
+          developmentName: data.developmentName,
+          message: data.message,
+        }),
+      });
 
-      if (error) throw error;
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error);
+      }
 
       setStatus('success');
       reset();

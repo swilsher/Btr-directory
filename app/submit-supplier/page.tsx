@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import Button from '@/components/ui/Button';
-import { supabase } from '@/lib/supabase';
 import { AlertCircle, CheckCircle } from 'lucide-react';
 
 interface SupplierFormData {
@@ -42,20 +41,25 @@ export default function SubmitSupplierPage() {
     setErrorMessage('');
 
     try {
-      const { error } = await supabase
-        .from('supplier_submissions')
-        .insert([{
-          company_name: data.companyName,
+      const response = await fetch('/api/supplier', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          companyName: data.companyName,
           category: data.category,
           website: data.website,
-          contact_name: data.contactName,
-          contact_email: data.contactEmail,
-          contact_phone: data.contactPhone || null,
+          contactName: data.contactName,
+          contactEmail: data.contactEmail,
+          contactPhone: data.contactPhone || null,
           description: data.description,
-          status: 'pending',
-        }]);
+        }),
+      });
 
-      if (error) throw error;
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error);
+      }
 
       setStatus('success');
       reset();

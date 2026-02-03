@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Button from '@/components/ui/Button';
-import { supabase } from '@/lib/supabase';
 import { Mail, CheckCircle, AlertCircle } from 'lucide-react';
 
 interface NewsletterFormData {
@@ -22,21 +21,20 @@ export default function NewsletterForm() {
     setMessage('');
 
     try {
-      const { error } = await supabase
-        .from('newsletter_signups')
-        .insert([{
+      const response = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
           email: data.email,
           name: data.name || null,
-          subscribed: true,
-        }]);
+        }),
+      });
 
-      if (error) {
-        if (error.code === '23505') {
-          setStatus('error');
-          setMessage('This email is already subscribed!');
-        } else {
-          throw error;
-        }
+      const result = await response.json();
+
+      if (!response.ok) {
+        setStatus('error');
+        setMessage(result.error || 'Failed to subscribe. Please try again later.');
       } else {
         setStatus('success');
         setMessage('Successfully subscribed! Check your email for confirmation.');
