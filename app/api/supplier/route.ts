@@ -41,7 +41,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Send notification email
-    await sendSupplierRequestNotification(
+    console.log('Attempting to send supplier notification...');
+    const emailResult = await sendSupplierRequestNotification(
       companyName,
       category,
       website,
@@ -50,6 +51,7 @@ export async function POST(request: NextRequest) {
       contactPhone || null,
       description
     );
+    console.log('Email result:', emailResult);
 
     return NextResponse.json({ success: true });
   } catch (error) {

@@ -1,13 +1,26 @@
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 const NOTIFICATION_EMAIL = 'sam@montyspace.com';
 const FROM_EMAIL = 'onboarding@resend.dev'; // Use verified domain sender after setup
 
+function getResendClient() {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    console.error('RESEND_API_KEY is not set!');
+    return null;
+  }
+  return new Resend(apiKey);
+}
+
 export async function sendNewsletterSignupNotification(email: string, name?: string) {
+  const resend = getResendClient();
+  if (!resend) {
+    return { success: false, error: 'Resend API key not configured' };
+  }
+
   try {
-    const { error } = await resend.emails.send({
+    console.log('Sending newsletter notification email...');
+    const { data, error } = await resend.emails.send({
       from: FROM_EMAIL,
       to: NOTIFICATION_EMAIL,
       subject: 'New Newsletter Signup - BTR Directory',
@@ -19,6 +32,7 @@ export async function sendNewsletterSignupNotification(email: string, name?: str
       return { success: false, error };
     }
 
+    console.log('Newsletter notification sent successfully:', data);
     return { success: true };
   } catch (error) {
     console.error('Failed to send newsletter notification:', error);
@@ -32,10 +46,16 @@ export async function sendCorrectionRequestNotification(
   userEmail: string,
   message: string
 ) {
+  const resend = getResendClient();
+  if (!resend) {
+    return { success: false, error: 'Resend API key not configured' };
+  }
+
   try {
     const typeLabel = requestType === 'correction' ? 'Error Report' : 'Missing Development Report';
+    console.log('Sending correction notification email...');
 
-    const { error } = await resend.emails.send({
+    const { data, error } = await resend.emails.send({
       from: FROM_EMAIL,
       to: NOTIFICATION_EMAIL,
       subject: `New ${typeLabel} - BTR Directory`,
@@ -47,6 +67,7 @@ export async function sendCorrectionRequestNotification(
       return { success: false, error };
     }
 
+    console.log('Correction notification sent successfully:', data);
     return { success: true };
   } catch (error) {
     console.error('Failed to send correction notification:', error);
@@ -63,8 +84,14 @@ export async function sendSupplierRequestNotification(
   contactPhone: string | null,
   description: string
 ) {
+  const resend = getResendClient();
+  if (!resend) {
+    return { success: false, error: 'Resend API key not configured' };
+  }
+
   try {
-    const { error } = await resend.emails.send({
+    console.log('Sending supplier notification email...');
+    const { data, error } = await resend.emails.send({
       from: FROM_EMAIL,
       to: NOTIFICATION_EMAIL,
       subject: `New Supplier Submission - ${companyName}`,
@@ -76,6 +103,7 @@ export async function sendSupplierRequestNotification(
       return { success: false, error };
     }
 
+    console.log('Supplier notification sent successfully:', data);
     return { success: true };
   } catch (error) {
     console.error('Failed to send supplier notification:', error);

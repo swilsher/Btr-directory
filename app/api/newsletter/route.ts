@@ -34,7 +34,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Send notification email
-    await sendNewsletterSignupNotification(email, name);
+    console.log('Attempting to send newsletter notification...');
+    const emailResult = await sendNewsletterSignupNotification(email, name);
+    console.log('Email result:', emailResult);
 
     return NextResponse.json({ success: true });
   } catch (error) {

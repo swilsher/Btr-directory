@@ -35,7 +35,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Send notification email
-    await sendCorrectionRequestNotification(requestType, userName, userEmail, fullMessage);
+    console.log('Attempting to send correction notification...');
+    const emailResult = await sendCorrectionRequestNotification(requestType, userName, userEmail, fullMessage);
+    console.log('Email result:', emailResult);
 
     return NextResponse.json({ success: true });
   } catch (error) {
