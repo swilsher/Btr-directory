@@ -105,59 +105,52 @@ export default async function HomePage() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {featuredDevelopments.map((dev, index) => (
-                  <Link key={dev.id} href={`/development/${dev.slug}`} className={index === 0 ? "md:col-span-2" : ""}>
-                    <Card className={`h-full overflow-hidden group ${index === 0 ? "border-2 border-primary-blue" : ""}`}>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
-                        {dev.image_url && (
-                          <div className={`relative bg-gray-200 overflow-hidden ${index === 0 ? "h-96 md:h-auto" : "h-64"}`}>
-                            <img
-                              src={dev.image_url}
-                              alt={dev.name}
-                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                            />
-                            {index === 0 && (
-                              <div className="absolute top-4 left-4">
-                                <Badge variant="info" className="bg-primary-blue text-white">Featured</Badge>
-                              </div>
-                            )}
+                {featuredDevelopments.map((dev) => (
+                  <Link key={dev.id} href={`/development/${dev.slug}`}>
+                    <Card className="h-full overflow-hidden group">
+                      {dev.image_url && (
+                        <div className="relative bg-gray-200 overflow-hidden h-48">
+                          <img
+                            src={dev.image_url}
+                            alt={dev.name}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
+                        </div>
+                      )}
+                      <div className="p-6">
+                        <h3 className="text-xl font-semibold text-text-primary mb-3">{dev.name}</h3>
+
+                        {dev.area && (
+                          <div className="flex items-start gap-2 mb-3 text-text-secondary">
+                            <MapPin size={18} className="text-primary-blue flex-shrink-0 mt-0.5" />
+                            <span className="font-medium text-sm">{dev.area}</span>
                           </div>
                         )}
-                        <div className={`${index === 0 ? "p-10" : "p-8"} flex flex-col justify-center`}>
-                          <h3 className={`${index === 0 ? "text-3xl" : "text-2xl"} font-semibold text-text-primary mb-4`}>{dev.name}</h3>
 
-                          {dev.area && (
-                            <div className="flex items-start gap-2 mb-4 text-text-secondary">
-                              <MapPin size={20} className="text-primary-blue flex-shrink-0 mt-0.5" />
-                              <span className="font-medium">{dev.area}</span>
+                        <div className="space-y-2 mb-4">
+                          {dev.operator && (
+                            <div className="flex justify-between border-b border-gray-100 pb-2">
+                              <span className="text-text-secondary font-medium text-sm">Operator</span>
+                              <span className="font-semibold text-text-primary text-sm">{dev.operator.name}</span>
                             </div>
                           )}
+                          {dev.number_of_units && (
+                            <div className="flex justify-between border-b border-gray-100 pb-2">
+                              <span className="text-text-secondary font-medium text-sm">Units</span>
+                              <span className="font-semibold text-text-primary text-sm">{formatNumber(dev.number_of_units)}</span>
+                            </div>
+                          )}
+                          {dev.status && (
+                            <div className="flex justify-between items-center">
+                              <span className="text-text-secondary font-medium text-sm">Status</span>
+                              <Badge className={getStatusColor(dev.status)}>{getFriendlyStatus(dev.status)}</Badge>
+                            </div>
+                          )}
+                        </div>
 
-                          <div className="space-y-3 mb-6">
-                            {dev.operator && (
-                              <div className="flex justify-between border-b border-gray-100 pb-2">
-                                <span className="text-text-secondary font-medium">Operator</span>
-                                <span className="font-semibold text-text-primary">{dev.operator.name}</span>
-                              </div>
-                            )}
-                            {dev.number_of_units && (
-                              <div className="flex justify-between border-b border-gray-100 pb-2">
-                                <span className="text-text-secondary font-medium">Units</span>
-                                <span className="font-semibold text-text-primary">{formatNumber(dev.number_of_units)}</span>
-                              </div>
-                            )}
-                            {dev.status && (
-                              <div className="flex justify-between items-center">
-                                <span className="text-text-secondary font-medium">Status</span>
-                                <Badge className={getStatusColor(dev.status)}>{getFriendlyStatus(dev.status)}</Badge>
-                              </div>
-                            )}
-                          </div>
-
-                          <div className="flex items-center text-primary-blue font-semibold group-hover:gap-2 transition-all">
-                            <span>View Development</span>
-                            <ArrowRight size={20} className="ml-1 group-hover:translate-x-1 transition-transform" />
-                          </div>
+                        <div className="flex items-center text-primary-blue font-semibold group-hover:gap-2 transition-all text-sm">
+                          <span>View Development</span>
+                          <ArrowRight size={18} className="ml-1 group-hover:translate-x-1 transition-transform" />
                         </div>
                       </div>
                     </Card>
