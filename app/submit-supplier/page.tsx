@@ -40,6 +40,12 @@ export default function SubmitSupplierPage() {
     setStatus('loading');
     setErrorMessage('');
 
+    // Auto-prepend https:// if missing
+    let website = data.website.trim();
+    if (!website.match(/^https?:\/\//i)) {
+      website = 'https://' + website;
+    }
+
     try {
       const response = await fetch('/api/supplier', {
         method: 'POST',
@@ -47,7 +53,7 @@ export default function SubmitSupplierPage() {
         body: JSON.stringify({
           companyName: data.companyName,
           category: data.category,
-          website: data.website,
+          website: website,
           contactName: data.contactName,
           contactEmail: data.contactEmail,
           contactPhone: data.contactPhone || null,
@@ -149,16 +155,12 @@ export default function SubmitSupplierPage() {
                       Website <span className="text-red-600">*</span>
                     </label>
                     <input
-                      type="url"
+                      type="text"
                       {...register('website', {
                         required: 'Website is required',
-                        pattern: {
-                          value: /^https?:\/\/.+/i,
-                          message: 'Please enter a valid URL (including http:// or https://)',
-                        },
                       })}
                       className="input-field"
-                      placeholder="https://www.yourcompany.com"
+                      placeholder="www.yourcompany.com"
                     />
                     {errors.website && (
                       <p className="mt-1 text-sm text-red-600">{errors.website.message}</p>
