@@ -60,6 +60,11 @@ export default function Footer() {
                   Suppliers
                 </Link>
               </li>
+              <li>
+                <Link href="/insights" className="text-text-secondary hover:text-primary-blue transition-colors">
+                  Insights
+                </Link>
+              </li>
             </ul>
           </div>
 

@@ -11,7 +11,9 @@
       "Bash(fi)",
       "Bash(npm run build:*)",
       "Bash(grep:*)",
-      "Bash(tail:*)"
+      "Bash(tail:*)",
+      "Bash(tree:*)",
+      "Bash(npm uninstall:*)"
     ]
   }
 }
