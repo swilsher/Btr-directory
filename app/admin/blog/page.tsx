@@ -235,6 +235,21 @@ export default function AdminBlogPage() {
             </div>
           </div>
 
+          {/* Admin Navigation */}
+          <div className="flex items-center gap-4 mb-4 text-sm">
+            <Link href="/admin/verify" className="text-gray-600 hover:text-primary-blue transition-colors">
+              Verify Developments
+            </Link>
+            <span className="text-gray-300">|</span>
+            <Link href="/admin/developments" className="text-gray-600 hover:text-primary-blue transition-colors">
+              Manage Developments
+            </Link>
+            <span className="text-gray-300">|</span>
+            <span className="text-primary-blue font-medium">
+              Blog Management
+            </span>
+          </div>
+
           {/* Filters */}
           <div className="grid grid-cols-5 gap-3">
             <select

@@ -579,6 +579,21 @@ export default function AdminVerifyPage() {
             </div>
           </div>
 
+          {/* Admin Navigation */}
+          <div className="flex items-center gap-4 mb-4 text-sm">
+            <span className="text-primary-blue font-medium">
+              Verify Developments
+            </span>
+            <span className="text-gray-300">|</span>
+            <a href="/admin/developments" className="text-gray-600 hover:text-primary-blue transition-colors">
+              Manage Developments
+            </a>
+            <span className="text-gray-300">|</span>
+            <a href="/admin/blog" className="text-gray-600 hover:text-primary-blue transition-colors">
+              Blog Management
+            </a>
+          </div>
+
           {/* Progress */}
           <div className="mb-4">
             <div className="flex items-center justify-between text-sm mb-2">
