@@ -14,6 +14,7 @@ export interface Development {
   longitude?: number;
   number_of_units?: number;
   status?: string;
+  sub_category?: string[];
   completion_date?: string;
   website_url?: string;
   image_url?: string;
@@ -123,18 +124,12 @@ export interface NewsletterSignup {
   subscribed: boolean;
 }
 
-export type DevelopmentStatus = 
-  | 'Proposed' 
-  | 'Under Construction' 
-  | 'Stabilised' 
-  | 'Completed'
-  | 'Complete - Operational'
-  | 'Pending completion - Construction'
-  | 'Pending completion - Planning'
-  | 'Lease-up';
+export type DevelopmentStatus =
+  | 'In Planning'
+  | 'Under Construction'
+  | 'Operational';
 
-export type FriendlyStatus = 
-  | 'Pre-Planning'
+export type FriendlyStatus =
   | 'In Planning'
   | 'Under Construction'
   | 'Operational';

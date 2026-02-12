@@ -14,7 +14,8 @@
       "Bash(tail:*)",
       "Bash(tree:*)",
       "Bash(npm uninstall:*)",
-      "Bash(npx next build:*)"
+      "Bash(npx next build:*)",
+      "Bash(dir \"C:\\\\Users\\\\samwi\\\\OneDrive\\\\Documents\\\\Btr-directory\" /s /b)"
     ]
   }
 }

@@ -23,14 +23,9 @@ const UK_REGIONS = [
 ];
 
 const STATUS_OPTIONS = [
-  'Proposed',
+  'In Planning',
   'Under Construction',
-  'Stabilised',
-  'Completed',
-  'Complete - Operational',
-  'Pending completion - Construction',
-  'Pending completion - Planning',
-  'Lease-up',
+  'Operational',
 ];
 
 // Generate last 12 months of options

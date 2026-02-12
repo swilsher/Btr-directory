@@ -7,6 +7,7 @@ import { Search, SlidersHorizontal, X } from 'lucide-react';
 interface DevelopmentFiltersProps {
   onFilterChange: (filters: FilterValues) => void;
   showRegionFilter?: boolean;
+  showSubCategoryFilter?: boolean;
 }
 
 export interface FilterValues {
@@ -21,6 +22,7 @@ export interface FilterValues {
   amenityConcierge: boolean;
   petsAllowed: boolean;
   wheelchairAccessible: boolean;
+  coLiving: boolean;
 }
 
 const initialFilters: FilterValues = {
@@ -35,6 +37,7 @@ const initialFilters: FilterValues = {
   amenityConcierge: false,
   petsAllowed: false,
   wheelchairAccessible: false,
+  coLiving: false,
 };
 
 const regions = [
@@ -52,13 +55,12 @@ const regions = [
 ];
 
 const statuses = [
-  'Pre-Planning',
   'In Planning',
   'Under Construction',
   'Operational',
 ];
 
-export default function DevelopmentFilters({ onFilterChange, showRegionFilter = true }: DevelopmentFiltersProps) {
+export default function DevelopmentFilters({ onFilterChange, showRegionFilter = true, showSubCategoryFilter = false }: DevelopmentFiltersProps) {
   const [filters, setFilters] = useState<FilterValues>(initialFilters);
   const [showAdvanced, setShowAdvanced] = useState(false);
 
@@ -176,6 +178,21 @@ export default function DevelopmentFilters({ onFilterChange, showRegionFilter = 
           </div>
         </div>
       </div>
+
+      {/* Sub-Category Filter */}
+      {showSubCategoryFilter && (
+        <div className="mb-4">
+          <label className="flex items-center space-x-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={filters.coLiving}
+              onChange={(e) => handleFilterChange('coLiving', e.target.checked)}
+              className="rounded border-gray-300 text-primary-blue focus:ring-primary-blue"
+            />
+            <span className="text-sm font-medium text-text-primary">Co-Living</span>
+          </label>
+        </div>
+      )}
 
       {/* Advanced Filters Toggle */}
       <button

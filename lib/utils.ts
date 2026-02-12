@@ -39,26 +39,25 @@ export function generateSlug(text: string): string {
 
 export function getFriendlyStatus(status: string | undefined): string {
   if (!status) return 'Unknown';
-  
-  const statusMap: Record<string, string> = {
-    'Proposed': 'Pre-Planning',
+
+  // Legacy fallback for any unmigrated values
+  const legacyMap: Record<string, string> = {
+    'Proposed': 'In Planning',
     'Pending completion - Planning': 'In Planning',
     'Pending completion - Construction': 'Under Construction',
-    'Under Construction': 'Under Construction',
-    'Complete - Operational': 'Operational',
+    'Lease-up': 'Operational',
     'Stabilised': 'Operational',
+    'Complete - Operational': 'Operational',
     'Completed': 'Operational',
-    'Lease-up': 'Under Construction',
   };
-  
-  return statusMap[status] || status;
+
+  return legacyMap[status] || status;
 }
 
 export function getStatusColor(status: string | undefined): string {
   const friendlyStatus = getFriendlyStatus(status);
 
   const colorMap: Record<string, string> = {
-    'Pre-Planning': 'bg-blue-50 text-primary-blue',
     'In Planning': 'bg-primary-blue-light text-primary-blue',
     'Under Construction': 'bg-orange-100 text-orange-700',
     'Operational': 'bg-green-100 text-green-700',

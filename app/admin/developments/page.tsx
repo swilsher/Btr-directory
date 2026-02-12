@@ -5,19 +5,14 @@ import { supabase } from '@/lib/supabase';
 import { Development } from '@/types/database';
 import Link from 'next/link';
 import { Plus, Edit, Trash2, Loader2, Search, Building2 } from 'lucide-react';
-import { getFriendlyStatus } from '@/lib/utils';
+
 
 const ADMIN_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || 'btr2025admin';
 
 const STATUS_OPTIONS = [
-  'Proposed',
-  'Pending completion - Planning',
-  'Pending completion - Construction',
+  'In Planning',
   'Under Construction',
-  'Lease-up',
-  'Stabilised',
-  'Complete - Operational',
-  'Completed',
+  'Operational',
 ];
 
 export default function AdminDevelopmentsPage() {
@@ -186,7 +181,7 @@ export default function AdminDevelopmentsPage() {
             >
               <option value="">All Statuses</option>
               {STATUS_OPTIONS.map(status => (
-                <option key={status} value={status}>{getFriendlyStatus(status)} ({status})</option>
+                <option key={status} value={status}>{status}</option>
               ))}
             </select>
 
@@ -296,15 +291,13 @@ export default function AdminDevelopmentsPage() {
                     </td>
                     <td className="px-6 py-4">
                       <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
-                        dev.status === 'Complete - Operational' || dev.status === 'Completed' || dev.status === 'Stabilised'
+                        dev.status === 'Operational'
                           ? 'bg-green-100 text-green-800'
-                          : dev.status === 'Under Construction' || dev.status === 'Lease-up'
+                          : dev.status === 'Under Construction'
                           ? 'bg-orange-100 text-orange-800'
-                          : dev.status === 'Proposed'
-                          ? 'bg-blue-100 text-blue-800'
-                          : 'bg-yellow-100 text-yellow-800'
+                          : 'bg-blue-100 text-blue-800'
                       }`}>
-                        {getFriendlyStatus(dev.status)}
+                        {dev.status || 'Unknown'}
                       </span>
                     </td>
                     <td className="px-6 py-4">
@@ -352,13 +345,13 @@ export default function AdminDevelopmentsPage() {
             <div className="bg-white p-4 rounded-lg border border-gray-200">
               <p className="text-sm text-gray-600">Operational</p>
               <p className="text-2xl font-semibold text-green-600">
-                {developments.filter(d => ['Complete - Operational', 'Completed', 'Stabilised'].includes(d.status || '')).length}
+                {developments.filter(d => d.status === 'Operational').length}
               </p>
             </div>
             <div className="bg-white p-4 rounded-lg border border-gray-200">
               <p className="text-sm text-gray-600">Under Construction</p>
               <p className="text-2xl font-semibold text-orange-600">
-                {developments.filter(d => ['Under Construction', 'Lease-up', 'Pending completion - Construction'].includes(d.status || '')).length}
+                {developments.filter(d => d.status === 'Under Construction').length}
               </p>
             </div>
             <div className="bg-white p-4 rounded-lg border border-gray-200">

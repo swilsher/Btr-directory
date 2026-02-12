@@ -10,14 +10,13 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 const STATUS_OPTIONS = [
-  'Proposed',
-  'Pending completion - Planning',
-  'Pending completion - Construction',
+  'In Planning',
   'Under Construction',
-  'Lease-up',
-  'Stabilised',
-  'Complete - Operational',
-  'Completed',
+  'Operational',
+];
+
+const SUB_CATEGORY_OPTIONS = [
+  'Co-Living',
 ];
 
 const REGION_OPTIONS = [
@@ -50,6 +49,7 @@ interface FormData {
   latitude: string;
   longitude: string;
   status: string;
+  sub_category: string[];
   number_of_units: string;
   completion_date: string;
   description: string;
@@ -80,6 +80,7 @@ export default function DevelopmentForm({ development, isEdit = false }: Develop
     latitude: '',
     longitude: '',
     status: '',
+    sub_category: [],
     number_of_units: '',
     completion_date: '',
     description: '',
@@ -102,6 +103,7 @@ export default function DevelopmentForm({ development, isEdit = false }: Develop
         latitude: development.latitude?.toString() || '',
         longitude: development.longitude?.toString() || '',
         status: development.status || '',
+        sub_category: development.sub_category || [],
         number_of_units: development.number_of_units?.toString() || '',
         completion_date: development.completion_date || '',
         description: development.description || '',
@@ -306,17 +308,26 @@ export default function DevelopmentForm({ development, isEdit = false }: Develop
     if (id) {
       updateField('operator_id', id);
     } else if (name) {
-      // Create new operator
-      const slug = generateSlug(name);
-      const { data, error } = await supabase
-        .from('operators')
-        .insert({ name, slug })
-        .select()
-        .single();
+      // New operator - create it first
+      try {
+        const slug = generateSlug(name);
+        const { data, error } = await supabase
+          .from('operators')
+          .insert({ name: name.trim(), slug })
+          .select()
+          .single();
 
-      if (!error && data) {
+        if (error) {
+          console.error('Error creating operator:', error);
+          alert('Failed to create new operator. Check RLS policies allow INSERT on operators table.');
+          return;
+        }
+
         setOperators(prev => [...prev, data].sort((a, b) => a.name.localeCompare(b.name)));
-        updateField('operator_id', data.id);
+        setFormData(prev => ({ ...prev, operator_id: data.id }));
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Failed to create new operator');
       }
     } else {
       updateField('operator_id', null);
@@ -328,16 +339,26 @@ export default function DevelopmentForm({ development, isEdit = false }: Develop
     if (id) {
       updateField('asset_owner_id', id);
     } else if (name) {
-      const slug = generateSlug(name);
-      const { data, error } = await supabase
-        .from('asset_owners')
-        .insert({ name, slug })
-        .select()
-        .single();
+      // New asset owner - create it first
+      try {
+        const slug = generateSlug(name);
+        const { data, error } = await supabase
+          .from('asset_owners')
+          .insert({ name: name.trim(), slug })
+          .select()
+          .single();
 
-      if (!error && data) {
+        if (error) {
+          console.error('Error creating asset owner:', error);
+          alert('Failed to create new asset owner. Check RLS policies allow INSERT on asset_owners table.');
+          return;
+        }
+
         setAssetOwners(prev => [...prev, data].sort((a, b) => a.name.localeCompare(b.name)));
-        updateField('asset_owner_id', data.id);
+        setFormData(prev => ({ ...prev, asset_owner_id: data.id }));
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Failed to create new asset owner');
       }
     } else {
       updateField('asset_owner_id', null);
@@ -369,6 +390,7 @@ export default function DevelopmentForm({ development, isEdit = false }: Develop
         latitude: formData.latitude ? parseFloat(formData.latitude) : null,
         longitude: formData.longitude ? parseFloat(formData.longitude) : null,
         status: formData.status || null,
+        sub_category: formData.sub_category.length > 0 ? formData.sub_category : null,
         number_of_units: formData.number_of_units ? parseInt(formData.number_of_units) : null,
         completion_date: formData.completion_date || null,
         description: formData.description.trim() || null,
@@ -632,6 +654,33 @@ export default function DevelopmentForm({ development, isEdit = false }: Develop
                   />
                 </div>
               </div>
+
+              {/* Sub-Category (Multifamily only) */}
+              {formData.development_type === 'Multifamily' && (
+                <div className="mt-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Sub-Category</label>
+                  <div className="flex flex-wrap gap-3">
+                    {SUB_CATEGORY_OPTIONS.map(option => (
+                      <label key={option} className="flex items-center space-x-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={formData.sub_category.includes(option)}
+                          onChange={(e) => {
+                            setFormData(prev => ({
+                              ...prev,
+                              sub_category: e.target.checked
+                                ? [...prev.sub_category, option]
+                                : prev.sub_category.filter(s => s !== option),
+                            }));
+                          }}
+                          className="rounded border-gray-300 text-primary-blue focus:ring-primary-blue"
+                        />
+                        <span className="text-sm text-gray-700">{option}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               <div className="mt-4">
                 <label className="block text-sm font-medium text-gray-700 mb-1">Website URL</label>

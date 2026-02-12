@@ -68,6 +68,11 @@ export default function MultifamilyPage() {
       filtered = filtered.filter((dev) => getFriendlyStatus(dev.status) === filters.status);
     }
 
+    // Sub-category filter
+    if (filters.coLiving) {
+      filtered = filtered.filter((dev) => dev.sub_category?.includes('Co-Living'));
+    }
+
     // Units range filter
     if (filters.minUnits) {
       filtered = filtered.filter((dev) => (dev.number_of_units || 0) >= parseInt(filters.minUnits));
@@ -125,7 +130,7 @@ export default function MultifamilyPage() {
         </section>
 
         <div className="container-custom py-8">
-          <DevelopmentFilters onFilterChange={handleFilterChange} />
+          <DevelopmentFilters onFilterChange={handleFilterChange} showSubCategoryFilter />
 
           {loading ? (
             <div className="flex justify-center items-center py-20">
