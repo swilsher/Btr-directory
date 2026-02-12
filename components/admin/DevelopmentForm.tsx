@@ -375,6 +375,10 @@ export default function DevelopmentForm({ development, isEdit = false }: Develop
       alert('Slug is required');
       return;
     }
+    if (!formData.status) {
+      alert('Status is required');
+      return;
+    }
 
     setLoading(true);
     try {
