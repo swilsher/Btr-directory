@@ -397,6 +397,8 @@ export default function DevelopmentForm({ development, isEdit = false }: Develop
         website_url: formData.website_url.trim() || null,
         image_url: formData.image_url || null,
         updated_at: new Date().toISOString(),
+        verified: true,
+        verified_at: new Date().toISOString(),
       };
 
       if (isEdit && development) {
