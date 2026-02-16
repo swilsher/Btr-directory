@@ -11,6 +11,9 @@ import { Development } from '@/types/database';
 import { formatNumber, getFriendlyStatus, getStatusColor } from '@/lib/utils';
 import NewsletterForm from '@/components/forms/NewsletterForm';
 
+// Revalidate homepage every 60 seconds to pick up database changes
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   title: "UK Build-to-Rent Directory | 614 BTR Developments & Operators",
   description: "The most comprehensive database of UK build-to-rent developments, operators, and suppliers. Browse 520+ multifamily and 109 single-family BTR properties across the United Kingdom.",

@@ -15,7 +15,10 @@
       "Bash(tree:*)",
       "Bash(npm uninstall:*)",
       "Bash(npx next build:*)",
-      "Bash(dir \"C:\\\\Users\\\\samwi\\\\OneDrive\\\\Documents\\\\Btr-directory\" /s /b)"
+      "Bash(dir \"C:\\\\Users\\\\samwi\\\\OneDrive\\\\Documents\\\\Btr-directory\" /s /b)",
+      "Bash(npx tsx:*)",
+      "Bash(echo:*)",
+      "Bash(npx playwright install:*)"
     ]
   }
 }
