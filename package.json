@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "verify": "py -3.13 scripts/verify/main.py",
+    "verify:setup": "py -3.13 -m pip install -r scripts/verify/requirements.txt",
+    "discover": "py -3.13 scripts/discover/main.py"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.91.0",

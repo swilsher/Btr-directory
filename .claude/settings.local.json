@@ -18,7 +18,17 @@
       "Bash(dir \"C:\\\\Users\\\\samwi\\\\OneDrive\\\\Documents\\\\Btr-directory\" /s /b)",
       "Bash(npx tsx:*)",
       "Bash(echo:*)",
-      "Bash(npx playwright install:*)"
+      "Bash(npx playwright install:*)",
+      "Bash(dir:*)",
+      "Bash(pip --version:*)",
+      "Bash(python -c:*)",
+      "WebFetch(domain:github.com)",
+      "Bash(npm run verify:*)",
+      "Bash(py -3.13:*)",
+      "WebFetch(domain:www.btrnews.co.uk)",
+      "WebFetch(domain:btrnews.co.uk)",
+      "Bash(node:*)",
+      "Bash(NEXT_PUBLIC_SUPABASE_URL=https://xnolegkoljhyehllefio.supabase.co NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhub2xlZ2tvbGpoeWVobGxlZmlvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4NDcyNDMsImV4cCI6MjA4NDQyMzI0M30.SStG0mJLI0tLE-5ZH_sKnzWL5m2dDcV-Iz-BbyDhmN0 node:*)"
     ]
   }
 }
