@@ -5,12 +5,12 @@ export const metadata: Metadata = {
   description: "Browse 520+ multifamily build-to-rent developments across the UK. Filter by region, status, and amenities. Comprehensive database of apartment complexes and high-rise rental properties.",
   keywords: ["multifamily BTR", "apartment buildings UK", "rental apartments", "build to rent apartments", "BTR complexes"],
   alternates: {
-    canonical: "https://ukbtrdirectory.com/multifamily",
+    canonical: "https://www.buildtorentdirectory.co.uk/multifamily",
   },
   openGraph: {
     title: "Multifamily BTR Developments UK | 520+ Properties",
     description: "Browse 520+ multifamily build-to-rent developments across the UK. Filter by region, status, and amenities.",
-    url: "https://ukbtrdirectory.com/multifamily",
+    url: "https://www.buildtorentdirectory.co.uk/multifamily",
     siteName: "UK BTR Directory",
     locale: "en_GB",
     type: "website",

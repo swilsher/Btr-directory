@@ -12,12 +12,12 @@ export const metadata: Metadata = {
     "UK property market",
   ],
   alternates: {
-    canonical: "https://ukbtrdirectory.com/insights",
+    canonical: "https://www.buildtorentdirectory.co.uk/insights",
   },
   openGraph: {
     title: "BTR Insights | Industry News, Case Studies & Market Reports",
     description: "Stay informed with the latest Build-to-Rent industry insights, expert analysis, case studies, and market reports.",
-    url: "https://ukbtrdirectory.com/insights",
+    url: "https://www.buildtorentdirectory.co.uk/insights",
     siteName: "UK BTR Directory",
     locale: "en_GB",
     type: "website",

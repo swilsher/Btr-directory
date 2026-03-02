@@ -5,12 +5,12 @@ export const metadata: Metadata = {
   description: "Explore 109+ single family build-to-rent homes across the UK. Detached and semi-detached rental properties from leading BTR operators.",
   keywords: ["single family rentals UK", "BTR homes", "detached rental properties", "family homes to rent", "single family BTR"],
   alternates: {
-    canonical: "https://ukbtrdirectory.com/single-family",
+    canonical: "https://www.buildtorentdirectory.co.uk/single-family",
   },
   openGraph: {
     title: "Single Family BTR Homes UK | 109+ Properties",
     description: "Explore 109+ single family build-to-rent homes across the UK. Detached and semi-detached rental properties from leading BTR operators.",
-    url: "https://ukbtrdirectory.com/single-family",
+    url: "https://www.buildtorentdirectory.co.uk/single-family",
     siteName: "UK BTR Directory",
     locale: "en_GB",
     type: "website",

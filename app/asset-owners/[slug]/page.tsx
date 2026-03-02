@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -7,6 +8,7 @@ import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { AssetOwner, Development } from '@/types/database';
 import { MapPin, ExternalLink, Building2 } from 'lucide-react';
+import { SITE_URL, SITE_NAME } from '@/lib/constants';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -33,6 +35,49 @@ async function getAssetOwnerDevelopments(ownerId: string): Promise<Development[]
 
   if (error || !data) return [];
   return data;
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const assetOwner = await getAssetOwner(slug);
+
+  if (!assetOwner) {
+    return { title: 'Asset Owner Not Found' };
+  }
+
+  const developments = await getAssetOwnerDevelopments(assetOwner.id);
+  const devCount = developments.length;
+  const devText = devCount > 0 ? ` with ${devCount} BTR development${devCount !== 1 ? 's' : ''} across the UK` : '';
+
+  const description = `${assetOwner.name} — BTR asset owner${devText}. ${assetOwner.description || 'Build-to-rent investment and asset management.'}`.substring(0, 160);
+
+  return {
+    title: `${assetOwner.name} — BTR Asset Owner`,
+    description,
+    alternates: {
+      canonical: `${SITE_URL}/asset-owners/${slug}`,
+    },
+    openGraph: {
+      title: `${assetOwner.name} — BTR Asset Owner`,
+      description,
+      url: `${SITE_URL}/asset-owners/${slug}`,
+      siteName: SITE_NAME,
+      locale: 'en_GB',
+      type: 'website',
+      images: assetOwner.logo_url ? [{
+        url: assetOwner.logo_url,
+        width: 1200,
+        height: 630,
+        alt: assetOwner.name,
+      }] : [],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${assetOwner.name} — BTR Asset Owner`,
+      description,
+      images: assetOwner.logo_url ? [assetOwner.logo_url] : [],
+    },
+  };
 }
 
 export default async function AssetOwnerDetailPage({ params }: PageProps) {

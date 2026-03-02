@@ -57,12 +57,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description,
     keywords: [`${operator.name}`, 'BTR operator', 'property management UK', operator.specialization || '', 'build to rent'],
     alternates: {
-      canonical: `https://ukbtrdirectory.com/operators/${slug}`,
+      canonical: `https://www.buildtorentdirectory.co.uk/operators/${slug}`,
     },
     openGraph: {
       title: `${operator.name} | BTR Property Operator`,
       description,
-      url: `https://ukbtrdirectory.com/operators/${slug}`,
+      url: `https://www.buildtorentdirectory.co.uk/operators/${slug}`,
       siteName: 'UK BTR Directory',
       locale: 'en_GB',
       type: 'website',
@@ -141,13 +141,6 @@ export default async function OperatorDetailPage({ params }: PageProps) {
         <div className="container-custom py-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-8">
-              {operator.description && (
-                <div className="bg-white rounded-lg border border-border p-6">
-                  <h2 className="text-2xl font-semibold mb-4">About</h2>
-                  <p className="text-text-secondary leading-relaxed">{operator.description}</p>
-                </div>
-              )}
-
               <div>
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="text-2xl font-semibold">Managed Developments</h2>
@@ -192,6 +185,31 @@ export default async function OperatorDetailPage({ params }: PageProps) {
                     </div>
                   )}
                 </div>
+
+                {operator.website && (
+                  <>
+                    <div className="border-t border-border my-4" />
+                    <Link
+                      href={operator.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-between text-primary-blue hover:text-primary-blue-hover font-medium transition-colors"
+                    >
+                      <span>Website</span>
+                      <ExternalLink size={16} />
+                    </Link>
+                  </>
+                )}
+
+                {operator.description && (
+                  <>
+                    <div className="border-t border-border my-4" />
+                    <div>
+                      <h4 className="text-sm font-semibold text-text-primary mb-2">About</h4>
+                      <p className="text-sm text-text-secondary leading-relaxed">{operator.description}</p>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>

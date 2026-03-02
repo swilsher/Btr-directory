@@ -5,12 +5,12 @@ export const metadata: Metadata = {
   description: "Directory of build-to-rent operators and property management companies in the UK. Search leading BTR operators including Greystar, Essential Living, Get Living, and more.",
   keywords: ["BTR operators UK", "property management companies", "rental operators", "build to rent companies", "BTR property managers"],
   alternates: {
-    canonical: "https://ukbtrdirectory.com/operators",
+    canonical: "https://www.buildtorentdirectory.co.uk/operators",
   },
   openGraph: {
     title: "BTR Operators & Property Management Companies UK",
     description: "Directory of build-to-rent operators and property management companies in the UK. Search leading BTR operators.",
-    url: "https://ukbtrdirectory.com/operators",
+    url: "https://www.buildtorentdirectory.co.uk/operators",
     siteName: "UK BTR Directory",
     locale: "en_GB",
     type: "website",

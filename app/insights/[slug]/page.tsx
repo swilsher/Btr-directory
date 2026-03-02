@@ -90,12 +90,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       ...(post.tags?.map((t) => t.name) || []),
     ],
     alternates: {
-      canonical: `https://ukbtrdirectory.com/insights/${slug}`,
+      canonical: `https://www.buildtorentdirectory.co.uk/insights/${slug}`,
     },
     openGraph: {
       title: post.title,
       description,
-      url: `https://ukbtrdirectory.com/insights/${slug}`,
+      url: `https://www.buildtorentdirectory.co.uk/insights/${slug}`,
       siteName: 'UK BTR Directory',
       locale: 'en_GB',
       type: 'article',

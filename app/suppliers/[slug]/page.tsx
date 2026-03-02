@@ -41,12 +41,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description,
     keywords: [`${supplier.name}`, supplier.category || '', 'BTR supplier', 'build to rent services', 'property services UK'],
     alternates: {
-      canonical: `https://ukbtrdirectory.com/suppliers/${slug}`,
+      canonical: `https://www.buildtorentdirectory.co.uk/suppliers/${slug}`,
     },
     openGraph: {
       title: `${supplier.name} | ${supplier.category} for BTR`,
       description,
-      url: `https://ukbtrdirectory.com/suppliers/${slug}`,
+      url: `https://www.buildtorentdirectory.co.uk/suppliers/${slug}`,
       siteName: 'UK BTR Directory',
       locale: 'en_GB',
       type: 'website',

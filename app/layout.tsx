@@ -1,18 +1,33 @@
 import type { Metadata } from "next";
+import { Inter, DM_Serif_Display } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/react';
+import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from '@/lib/constants';
 import "./globals.css";
 
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+});
+
+const dmSerif = DM_Serif_Display({
+  weight: '400',
+  subsets: ['latin'],
+  variable: '--font-dm-serif',
+  display: 'swap',
+});
+
 export const metadata: Metadata = {
-  metadataBase: new URL('https://ukbtrdirectory.com'),
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: "UK Build-to-Rent Directory | 614 BTR Developments & Operators",
-    template: "%s | UK BTR Directory"
+    default: "BTR Directory | UK Build to Rent Developments Database",
+    template: `%s | ${SITE_NAME}`
   },
-  description: "The most comprehensive database of UK build-to-rent developments, operators, and suppliers. Browse 520+ multifamily and 109 single-family BTR properties across the United Kingdom.",
+  description: SITE_DESCRIPTION,
   keywords: ["build to rent UK", "BTR developments", "rental properties UK", "multifamily housing", "single family homes", "property operators", "BTR directory", "UK rental market"],
-  authors: [{ name: "UK BTR Directory" }],
-  creator: "UK BTR Directory",
-  publisher: "UK BTR Directory",
+  authors: [{ name: SITE_NAME }],
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
   formatDetection: {
     email: false,
     address: false,
@@ -21,23 +36,23 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_GB",
-    url: "https://ukbtrdirectory.com",
-    siteName: "UK BTR Directory",
-    title: "UK Build-to-Rent Directory | 614 BTR Developments & Operators",
-    description: "The most comprehensive database of UK build-to-rent developments, operators, and suppliers. Browse 520+ multifamily and 109 single-family BTR properties.",
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    title: "BTR Directory | UK Build to Rent Developments Database",
+    description: SITE_DESCRIPTION,
     images: [
       {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "UK BTR Directory",
+        alt: SITE_NAME,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "UK Build-to-Rent Directory | 614 BTR Developments & Operators",
-    description: "The most comprehensive database of UK build-to-rent developments, operators, and suppliers. Browse 520+ multifamily and 109 single-family BTR properties.",
+    title: "BTR Directory | UK Build to Rent Developments Database",
+    description: SITE_DESCRIPTION,
     images: ["/og-image.jpg"],
   },
   robots: {
@@ -51,9 +66,6 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-  verification: {
-    google: 'your-google-verification-code',
-  },
 };
 
 export default function RootLayout({
@@ -62,13 +74,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en-GB">
+    <html lang="en-GB" className={`${inter.variable} ${dmSerif.variable}`}>
       <head>
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
       </head>
       <body className="antialiased">
         {children}

@@ -5,12 +5,12 @@ export const metadata: Metadata = {
   description: "Connect with BTR industry suppliers across energy, consultancy, technology, architecture, and interior design. Directory of 32+ service providers for build-to-rent developments.",
   keywords: ["BTR suppliers", "property technology", "BTR consultancy", "architecture firms", "interior design", "BTR service providers"],
   alternates: {
-    canonical: "https://ukbtrdirectory.com/suppliers",
+    canonical: "https://www.buildtorentdirectory.co.uk/suppliers",
   },
   openGraph: {
     title: "BTR Industry Suppliers & Service Providers UK",
     description: "Connect with BTR industry suppliers across energy, consultancy, technology, architecture, and interior design.",
-    url: "https://ukbtrdirectory.com/suppliers",
+    url: "https://www.buildtorentdirectory.co.uk/suppliers",
     siteName: "UK BTR Directory",
     locale: "en_GB",
     type: "website",

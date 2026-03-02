@@ -19,12 +19,12 @@ export const metadata: Metadata = {
   description: "The most comprehensive database of UK build-to-rent developments, operators, and suppliers. Browse 520+ multifamily and 109 single-family BTR properties across the United Kingdom.",
   keywords: ["build to rent UK", "BTR developments", "rental properties UK", "multifamily housing", "single family homes", "property operators"],
   alternates: {
-    canonical: "https://ukbtrdirectory.com",
+    canonical: "https://www.buildtorentdirectory.co.uk",
   },
   openGraph: {
     title: "UK Build-to-Rent Directory | 614 BTR Developments & Operators",
     description: "The most comprehensive database of UK build-to-rent developments, operators, and suppliers. Browse 520+ multifamily and 109 single-family BTR properties.",
-    url: "https://ukbtrdirectory.com",
+    url: "https://www.buildtorentdirectory.co.uk",
     siteName: "UK BTR Directory",
     locale: "en_GB",
     type: "website",

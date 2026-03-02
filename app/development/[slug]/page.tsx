@@ -56,12 +56,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description: description.substring(0, 160),
     keywords: [`${development.name}`, `BTR ${development.area}`, `${development.development_type}`, 'build to rent UK', development.operator?.name || ''],
     alternates: {
-      canonical: `https://ukbtrdirectory.com/development/${slug}`,
+      canonical: `https://www.buildtorentdirectory.co.uk/development/${slug}`,
     },
     openGraph: {
       title: `${development.name} | BTR Development in ${development.area || 'UK'}`,
       description: description.substring(0, 160),
-      url: `https://ukbtrdirectory.com/development/${slug}`,
+      url: `https://www.buildtorentdirectory.co.uk/development/${slug}`,
       siteName: 'UK BTR Directory',
       locale: 'en_GB',
       type: 'website',
