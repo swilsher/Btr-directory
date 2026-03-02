@@ -24,10 +24,10 @@ if sys.platform == "win32":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
-# Add discover/ and verify/ to path for imports
+# Add discover/ to path first (takes priority), verify/ appended for postcode lookups
 scripts_dir = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-sys.path.insert(0, str(scripts_dir / "verify"))
+sys.path.append(str(scripts_dir / "verify"))
 
 from dotenv import load_dotenv
 

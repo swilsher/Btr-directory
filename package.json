@@ -9,22 +9,28 @@
     "lint": "next lint",
     "verify": "py -3.13 scripts/verify/main.py",
     "verify:setup": "py -3.13 -m pip install -r scripts/verify/requirements.txt",
-    "discover": "py -3.13 scripts/discover/main.py"
+    "discover": "py -3.13 scripts/discover/main.py",
+    "enrich-coords": "cd scripts && npx tsx enrich-coordinates.ts",
+    "enrich-operators": "cd scripts && npx tsx enrich-operators.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.91.0",
     "@vercel/analytics": "^1.6.1",
     "clsx": "^2.1.1",
+    "leaflet": "^1.9.4",
     "lucide-react": "^0.562.0",
     "next": "^16.1.4",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "react-hook-form": "^7.71.1",
+    "react-leaflet": "^5.0.0",
+    "react-leaflet-cluster": "^4.0.0",
     "react-markdown": "^10.1.0",
     "resend": "^6.9.1",
     "tailwindcss": "^3.4.19"
   },
   "devDependencies": {
+    "@types/leaflet": "^1.9.21",
     "@types/node": "^25.0.10",
     "@types/react": "^19.2.9",
     "@types/react-dom": "^19.2.3",

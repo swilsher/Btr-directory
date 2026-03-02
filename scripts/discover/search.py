@@ -8,10 +8,16 @@ from models import SearchResult
 
 
 EXCLUDED_DOMAINS = {
+    # Social media
     "youtube.com", "linkedin.com", "twitter.com", "x.com",
     "facebook.com", "instagram.com", "tiktok.com",
-    "pinterest.com", "reddit.com", "companieshouse.gov.uk",
-    "gov.uk", "wikipedia.org",
+    "pinterest.com", "reddit.com",
+    # Government / reference
+    "companieshouse.gov.uk", "gov.uk", "wikipedia.org",
+    # Market overview sites (rarely name specific developments)
+    "savills.co.uk", "knightfrank.co.uk", "jll.co.uk",
+    "bpf.org.uk", "century21uk.com", "lrg.co.uk",
+    "cbre.co.uk", "cushmanwakefield.com",
 }
 
 
@@ -21,22 +27,28 @@ def build_discovery_queries(mode: str = "test", custom_query: str = None) -> lis
         return [custom_query]
 
     base_queries = [
-        "build to rent development UK 2025",
-        "build to rent development UK 2026",
-        "new BTR scheme UK announced",
+        # News articles that name specific developments
+        '"build to rent" approved planning permission 2025',
+        '"build to rent" new development opens 2025 OR 2026',
+        'site:btrnews.co.uk new BTR development',
     ]
 
     extended_queries = [
-        "build to rent planning approval UK",
-        "BTR development under construction UK",
-        "build to rent apartments opening UK 2025",
-        "build to rent apartments opening UK 2026",
-        "new build to rent homes UK",
-        "BTR scheme planning permission 2025",
-        "BTR scheme planning permission 2026",
-        "site:btrnews.co.uk new BTR development",
-        "site:reactnews.com build to rent",
-        "site:propertyweek.com build to rent development",
+        # City-specific queries (more likely to name individual schemes)
+        '"build to rent" Manchester new development',
+        '"build to rent" Birmingham new development',
+        '"build to rent" Leeds new development',
+        '"build to rent" Bristol new development',
+        '"build to rent" Liverpool new development',
+        '"build to rent" London new scheme approved',
+        # Planning and construction news
+        '"build to rent" planning approved units 2025 OR 2026',
+        '"BTR scheme" construction begins UK',
+        '"build to rent" homes completed opens UK 2025 OR 2026',
+        # Industry news sites with development specifics
+        'site:reactnews.com "build to rent" new',
+        'site:propertyweek.com "build to rent" planning',
+        'site:placenorthwest.co.uk build to rent',
     ]
 
     if mode == "test":
