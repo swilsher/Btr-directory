@@ -11,6 +11,7 @@ import { createClient } from '@supabase/supabase-js';
 import { BlogPost, BlogTag, CONTENT_TYPE_LABELS } from '@/types/blog';
 import { Calendar, Tag, ArrowLeft, BookOpen, FileText, BarChart3 } from 'lucide-react';
 import JsonLd from '@/components/seo/JsonLd';
+import Breadcrumbs from '@/components/seo/Breadcrumbs';
 import { articleSchema } from '@/lib/schema';
 import { SITE_URL } from '@/lib/constants';
 
@@ -149,6 +150,11 @@ export default async function InsightDetailPage({ params }: PageProps) {
     <>
       <JsonLd data={schema} />
       <Header />
+      <Breadcrumbs items={[
+        { label: 'Home', href: '/' },
+        { label: 'Insights', href: '/insights' },
+        { label: post.title, href: `/insights/${slug}` },
+      ]} />
       <main className="min-h-screen bg-background">
         {/* Hero Section */}
         <section className="bg-gradient-to-br from-primary-blue to-white text-white py-12">

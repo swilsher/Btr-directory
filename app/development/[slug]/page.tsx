@@ -11,6 +11,8 @@ import { formatNumber, formatCurrency, formatDate, getFriendlyStatus, getStatusC
 import { MapPin, Calendar, Building2, DollarSign, Home, Check, ExternalLink, User, Briefcase, CheckCircle } from 'lucide-react';
 import { SITE_URL, SITE_NAME } from '@/lib/constants';
 import JsonLd from '@/components/seo/JsonLd';
+import Breadcrumbs from '@/components/seo/Breadcrumbs';
+import DevelopmentCard from '@/components/cards/DevelopmentCard';
 import { developmentPlaceSchema } from '@/lib/schema';
 
 interface PageProps {
@@ -30,6 +32,36 @@ async function getDevelopment(slug: string): Promise<Development | null> {
   }
 
   return data;
+}
+
+async function getRelatedDevelopments(development: Development): Promise<Development[]> {
+  // Try same area first
+  if (development.area) {
+    const { data } = await supabase
+      .from('developments')
+      .select('*, asset_owner:asset_owners(*), operator:operators(*)')
+      .eq('is_published', true)
+      .eq('area', development.area)
+      .neq('id', development.id)
+      .limit(4);
+
+    if (data && data.length >= 2) return data;
+  }
+
+  // Fallback to same region
+  if (development.region) {
+    const { data } = await supabase
+      .from('developments')
+      .select('*, asset_owner:asset_owners(*), operator:operators(*)')
+      .eq('is_published', true)
+      .eq('region', development.region)
+      .neq('id', development.id)
+      .limit(4);
+
+    return data || [];
+  }
+
+  return [];
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -94,6 +126,8 @@ export default async function DevelopmentPage({ params }: PageProps) {
     notFound();
   }
 
+  const relatedDevelopments = await getRelatedDevelopments(development);
+
   const amenities = [
     { key: 'amenity_gym', label: 'Gym', value: development.amenity_gym },
     { key: 'amenity_pool', label: 'Pool', value: development.amenity_pool },
@@ -126,6 +160,11 @@ export default async function DevelopmentPage({ params }: PageProps) {
     <>
       <JsonLd data={placeSchema} />
       <Header />
+      <Breadcrumbs items={[
+        { label: 'Home', href: '/' },
+        { label: development.development_type === 'Single Family' ? 'Single Family' : 'Multifamily', href: development.development_type === 'Single Family' ? '/single-family' : '/multifamily' },
+        { label: development.name, href: `/development/${slug}` },
+      ]} />
       <main className="min-h-screen bg-background">
         {/* Hero Image */}
         {development.image_url && (
@@ -366,6 +405,18 @@ export default async function DevelopmentPage({ params }: PageProps) {
             </div>
           </div>
         </div>
+
+        {/* Related Developments */}
+        {relatedDevelopments.length > 0 && (
+          <div className="container-custom pb-8">
+            <h2 className="text-2xl font-semibold mb-6">Nearby Developments</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {relatedDevelopments.map((dev) => (
+                <DevelopmentCard key={dev.id} development={dev} />
+              ))}
+            </div>
+          </div>
+        )}
       </main>
       <Footer />
     </>

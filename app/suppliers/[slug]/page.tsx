@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { Supplier } from '@/types/database';
 import { ExternalLink, Tag, Mail } from 'lucide-react';
+import Breadcrumbs from '@/components/seo/Breadcrumbs';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -79,6 +80,11 @@ export default async function SupplierDetailPage({ params }: PageProps) {
   return (
     <>
       <Header />
+      <Breadcrumbs items={[
+        { label: 'Home', href: '/' },
+        { label: 'Suppliers', href: '/suppliers' },
+        { label: supplier.name, href: `/suppliers/${slug}` },
+      ]} />
       <main className="min-h-screen bg-background">
         <section className="bg-gradient-to-br from-primary-blue to-white text-white py-12">
           <div className="container-custom">

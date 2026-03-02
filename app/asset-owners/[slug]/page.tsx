@@ -9,6 +9,7 @@ import { supabase } from '@/lib/supabase';
 import { AssetOwner, Development } from '@/types/database';
 import { MapPin, ExternalLink, Building2 } from 'lucide-react';
 import { SITE_URL, SITE_NAME } from '@/lib/constants';
+import Breadcrumbs from '@/components/seo/Breadcrumbs';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -93,6 +94,11 @@ export default async function AssetOwnerDetailPage({ params }: PageProps) {
   return (
     <>
       <Header />
+      <Breadcrumbs items={[
+        { label: 'Home', href: '/' },
+        { label: 'Asset Owners', href: '/asset-owners' },
+        { label: assetOwner.name, href: `/asset-owners/${slug}` },
+      ]} />
       <main className="min-h-screen bg-background">
         <section className="bg-gradient-to-br from-primary-blue to-white text-white py-12">
           <div className="container-custom">

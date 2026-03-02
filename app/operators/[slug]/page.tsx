@@ -9,6 +9,7 @@ import { supabase } from '@/lib/supabase';
 import { Operator, Development } from '@/types/database';
 import { MapPin, ExternalLink, Building2, Tag } from 'lucide-react';
 import { SITE_URL, SITE_NAME } from '@/lib/constants';
+import Breadcrumbs from '@/components/seo/Breadcrumbs';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -98,6 +99,11 @@ export default async function OperatorDetailPage({ params }: PageProps) {
   return (
     <>
       <Header />
+      <Breadcrumbs items={[
+        { label: 'Home', href: '/' },
+        { label: 'Operators', href: '/operators' },
+        { label: operator.name, href: `/operators/${slug}` },
+      ]} />
       <main className="min-h-screen bg-background">
         <section className="bg-gradient-to-br from-primary-blue to-white text-white py-12">
           <div className="container-custom">
