@@ -9,6 +9,7 @@ import { supabase } from '@/lib/supabase';
 import { Development } from '@/types/database';
 import { formatNumber, formatCurrency, formatDate, getFriendlyStatus, getStatusColor, formatVerifiedDate } from '@/lib/utils';
 import { MapPin, Calendar, Building2, DollarSign, Home, Check, ExternalLink, User, Briefcase, CheckCircle } from 'lucide-react';
+import { SITE_URL, SITE_NAME } from '@/lib/constants';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -52,17 +53,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const description = `${development.name} is a ${development.development_type?.toLowerCase()} build-to-rent development in ${development.area || 'the UK'}${operatorText}.${unitsText}${amenitiesText}.`;
 
   return {
-    title: `${development.name} | BTR Development in ${development.area || 'UK'}`,
-    description: description.substring(0, 160),
+    title: `${development.name}${development.area ? `, ${development.area}` : ''} | Build to Rent`,
+    description: description.substring(0, 155),
     keywords: [`${development.name}`, `BTR ${development.area}`, `${development.development_type}`, 'build to rent UK', development.operator?.name || ''],
     alternates: {
-      canonical: `https://www.buildtorentdirectory.co.uk/development/${slug}`,
+      canonical: `${SITE_URL}/development/${slug}`,
     },
     openGraph: {
-      title: `${development.name} | BTR Development in ${development.area || 'UK'}`,
-      description: description.substring(0, 160),
-      url: `https://www.buildtorentdirectory.co.uk/development/${slug}`,
-      siteName: 'UK BTR Directory',
+      title: `${development.name}${development.area ? `, ${development.area}` : ''} | Build to Rent`,
+      description: description.substring(0, 155),
+      url: `${SITE_URL}/development/${slug}`,
+      siteName: SITE_NAME,
       locale: 'en_GB',
       type: 'website',
       images: development.image_url ? [
@@ -76,8 +77,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${development.name} | BTR Development`,
-      description: description.substring(0, 160),
+      title: `${development.name}${development.area ? `, ${development.area}` : ''} | Build to Rent`,
+      description: description.substring(0, 155),
       images: development.image_url ? [development.image_url] : [],
     },
   };

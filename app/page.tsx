@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { cache } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import Button from '@/components/ui/Button';
@@ -10,28 +11,12 @@ import { supabase } from '@/lib/supabase';
 import { Development } from '@/types/database';
 import { formatNumber, getFriendlyStatus, getStatusColor } from '@/lib/utils';
 import NewsletterForm from '@/components/forms/NewsletterForm';
+import { SITE_URL, SITE_NAME } from '@/lib/constants';
 
 // Revalidate homepage every 60 seconds to pick up database changes
 export const revalidate = 60;
 
-export const metadata: Metadata = {
-  title: "UK Build-to-Rent Directory | 614 BTR Developments & Operators",
-  description: "The most comprehensive database of UK build-to-rent developments, operators, and suppliers. Browse 520+ multifamily and 109 single-family BTR properties across the United Kingdom.",
-  keywords: ["build to rent UK", "BTR developments", "rental properties UK", "multifamily housing", "single family homes", "property operators"],
-  alternates: {
-    canonical: "https://www.buildtorentdirectory.co.uk",
-  },
-  openGraph: {
-    title: "UK Build-to-Rent Directory | 614 BTR Developments & Operators",
-    description: "The most comprehensive database of UK build-to-rent developments, operators, and suppliers. Browse 520+ multifamily and 109 single-family BTR properties.",
-    url: "https://www.buildtorentdirectory.co.uk",
-    siteName: "UK BTR Directory",
-    locale: "en_GB",
-    type: "website",
-  },
-};
-
-async function getStats() {
+const getStats = cache(async () => {
   const [multifamilyCount, singleFamilyCount, operatorsCount, suppliersCount] = await Promise.all([
     supabase.from('developments').select('id', { count: 'exact', head: true }).eq('development_type', 'Multifamily').eq('is_published', true),
     supabase.from('developments').select('id', { count: 'exact', head: true }).eq('development_type', 'Single Family').eq('is_published', true),
@@ -44,6 +29,27 @@ async function getStats() {
     singleFamily: singleFamilyCount.count || 0,
     operators: operatorsCount.count || 0,
     suppliers: suppliersCount.count || 0,
+  };
+});
+
+export async function generateMetadata(): Promise<Metadata> {
+  const stats = await getStats();
+  const total = stats.multifamily + stats.singleFamily;
+
+  return {
+    title: 'BTR Directory | UK Build to Rent Developments Database',
+    description: `Browse ${total.toLocaleString()}+ Build to Rent developments across the UK. Search by city, operator, completion date and more. The most comprehensive BTR database available.`,
+    alternates: {
+      canonical: SITE_URL,
+    },
+    openGraph: {
+      title: 'BTR Directory | UK Build to Rent Developments Database',
+      description: `Browse ${total.toLocaleString()}+ Build to Rent developments across the UK. The most comprehensive BTR database available.`,
+      url: SITE_URL,
+      siteName: SITE_NAME,
+      locale: 'en_GB',
+      type: 'website',
+    },
   };
 }
 

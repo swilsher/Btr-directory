@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { Operator, Development } from '@/types/database';
 import { MapPin, ExternalLink, Building2, Tag } from 'lucide-react';
+import { SITE_URL, SITE_NAME } from '@/lib/constants';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -53,17 +54,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const description = `${operator.name} - Build-to-rent property operator${developmentText}. ${operator.description || 'Professional BTR property management services.'}`.substring(0, 160);
 
   return {
-    title: `${operator.name} | BTR Property Operator`,
+    title: `${operator.name} — Build to Rent Developments`,
     description,
     keywords: [`${operator.name}`, 'BTR operator', 'property management UK', operator.specialization || '', 'build to rent'],
     alternates: {
-      canonical: `https://www.buildtorentdirectory.co.uk/operators/${slug}`,
+      canonical: `${SITE_URL}/operators/${slug}`,
     },
     openGraph: {
-      title: `${operator.name} | BTR Property Operator`,
+      title: `${operator.name} — Build to Rent Developments`,
       description,
-      url: `https://www.buildtorentdirectory.co.uk/operators/${slug}`,
-      siteName: 'UK BTR Directory',
+      url: `${SITE_URL}/operators/${slug}`,
+      siteName: SITE_NAME,
       locale: 'en_GB',
       type: 'website',
       images: operator.logo_url ? [
@@ -77,7 +78,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${operator.name} | BTR Property Operator`,
+      title: `${operator.name} — Build to Rent Developments`,
       description,
       images: operator.logo_url ? [operator.logo_url] : [],
     },
