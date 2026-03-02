@@ -1,6 +1,9 @@
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import FilterableDevelopmentList from '@/components/filterable/FilterableDevelopmentList';
+import JsonLd from '@/components/seo/JsonLd';
+import { itemListSchema } from '@/lib/schema';
+import { SITE_URL } from '@/lib/constants';
 import { supabase } from '@/lib/supabase';
 
 export const revalidate = 60;
@@ -15,8 +18,14 @@ export default async function SingleFamilyPage() {
 
   const developments = data || [];
 
+  const listSchema = itemListSchema(
+    developments.map((dev) => ({ name: dev.name, url: `${SITE_URL}/development/${dev.slug}` })),
+    'Single Family BTR Developments UK'
+  );
+
   return (
     <>
+      <JsonLd data={listSchema} />
       <Header />
       <main className="min-h-screen bg-background">
         <section className="bg-gradient-to-br from-primary-blue to-white text-white py-12">

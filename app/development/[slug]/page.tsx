@@ -10,6 +10,8 @@ import { Development } from '@/types/database';
 import { formatNumber, formatCurrency, formatDate, getFriendlyStatus, getStatusColor, formatVerifiedDate } from '@/lib/utils';
 import { MapPin, Calendar, Building2, DollarSign, Home, Check, ExternalLink, User, Briefcase, CheckCircle } from 'lucide-react';
 import { SITE_URL, SITE_NAME } from '@/lib/constants';
+import JsonLd from '@/components/seo/JsonLd';
+import { developmentPlaceSchema } from '@/lib/schema';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -107,8 +109,22 @@ export default async function DevelopmentPage({ params }: PageProps) {
     { key: 'amenity_playground', label: 'Playground', value: development.amenity_playground },
   ].filter((a) => a.value);
 
+  const placeSchema = developmentPlaceSchema({
+    name: development.name,
+    description: development.description,
+    area: development.area,
+    region: development.region,
+    latitude: development.latitude,
+    longitude: development.longitude,
+    image_url: development.image_url,
+    number_of_units: development.number_of_units,
+    slug: slug,
+    amenities: amenities.map((a) => a.label),
+  });
+
   return (
     <>
+      <JsonLd data={placeSchema} />
       <Header />
       <main className="min-h-screen bg-background">
         {/* Hero Image */}

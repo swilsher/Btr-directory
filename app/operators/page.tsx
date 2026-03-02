@@ -2,6 +2,9 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import FilterableOperatorList from '@/components/filterable/FilterableOperatorList';
 import type { OperatorWithStats } from '@/components/filterable/FilterableOperatorList';
+import JsonLd from '@/components/seo/JsonLd';
+import { itemListSchema } from '@/lib/schema';
+import { SITE_URL } from '@/lib/constants';
 import { supabase } from '@/lib/supabase';
 
 export const revalidate = 60;
@@ -30,8 +33,14 @@ export default async function OperatorsPage() {
     return a.name.localeCompare(b.name);
   });
 
+  const listSchema = itemListSchema(
+    withStats.map((op) => ({ name: op.name, url: `${SITE_URL}/operators/${op.slug}` })),
+    'BTR Operators UK'
+  );
+
   return (
     <>
+      <JsonLd data={listSchema} />
       <Header />
       <main className="min-h-screen bg-background">
         <section className="bg-gradient-to-br from-primary-blue to-white text-white py-12">

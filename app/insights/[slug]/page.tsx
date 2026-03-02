@@ -10,6 +10,9 @@ import ReactMarkdown from 'react-markdown';
 import { createClient } from '@supabase/supabase-js';
 import { BlogPost, BlogTag, CONTENT_TYPE_LABELS } from '@/types/blog';
 import { Calendar, Tag, ArrowLeft, BookOpen, FileText, BarChart3 } from 'lucide-react';
+import JsonLd from '@/components/seo/JsonLd';
+import { articleSchema } from '@/lib/schema';
+import { SITE_URL } from '@/lib/constants';
 
 // Create a server-side Supabase client
 const supabase = createClient(
@@ -132,8 +135,19 @@ export default async function InsightDetailPage({ params }: PageProps) {
       })
     : '';
 
+  const schema = articleSchema({
+    title: post.title,
+    description: post.excerpt,
+    url: `${SITE_URL}/insights/${slug}`,
+    imageUrl: post.featured_image_url,
+    publishedAt: post.published_at,
+    updatedAt: post.updated_at,
+    categoryName: post.category?.name,
+  });
+
   return (
     <>
+      <JsonLd data={schema} />
       <Header />
       <main className="min-h-screen bg-background">
         {/* Hero Section */}
