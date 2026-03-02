@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next';
 import { supabase } from '@/lib/supabase';
 import { SITE_URL } from '@/lib/constants';
+import { generateSlug } from '@/lib/utils';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Static pages
@@ -18,7 +19,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Development pages
   const { data: developments } = await supabase
     .from('developments')
-    .select('slug, updated_at')
+    .select('slug, updated_at, area')
     .eq('is_published', true);
 
   const developmentPages: MetadataRoute.Sitemap = (developments || []).map((dev) => ({
@@ -68,6 +69,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.5,
   }));
 
+  // City pages
+  const uniqueAreas = new Set((developments || []).map((d) => d.area).filter(Boolean));
+  const cityPages: MetadataRoute.Sitemap = [
+    { url: `${SITE_URL}/cities`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
+    ...Array.from(uniqueAreas).map((area) => ({
+      url: `${SITE_URL}/cities/${generateSlug(area!)}`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly' as const,
+      priority: 0.7,
+    })),
+  ];
+
   return [
     ...staticPages,
     ...developmentPages,
@@ -75,5 +88,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...supplierPages,
     ...insightPages,
     ...assetOwnerPages,
+    ...cityPages,
   ];
 }
