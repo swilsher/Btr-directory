@@ -5,6 +5,7 @@ import Footer from '@/components/layout/Footer';
 import Badge from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
 import Link from 'next/link';
+import Image from 'next/image';
 import { supabase } from '@/lib/supabase';
 import { Development } from '@/types/database';
 import { formatNumber, formatCurrency, formatDate, getFriendlyStatus, getStatusColor, formatVerifiedDate } from '@/lib/utils';
@@ -169,10 +170,13 @@ export default async function DevelopmentPage({ params }: PageProps) {
         {/* Hero Image */}
         {development.image_url && (
           <div className="w-full h-96 bg-gray-200 relative">
-            <img
+            <Image
               src={development.image_url}
               alt={development.name}
-              className="w-full h-full object-cover"
+              fill
+              sizes="100vw"
+              priority
+              className="object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
           </div>
@@ -337,11 +341,15 @@ export default async function DevelopmentPage({ params }: PageProps) {
                   <Link href={`/asset-owners/${development.asset_owner.slug}`}>
                     <div className="hover:bg-gray-50 p-3 rounded-lg transition-colors">
                       {development.asset_owner.logo_url && (
-                        <img
-                          src={development.asset_owner.logo_url}
-                          alt={development.asset_owner.name}
-                          className="h-12 mb-3 object-contain"
-                        />
+                        <div className="relative h-12 w-40 mb-3">
+                          <Image
+                            src={development.asset_owner.logo_url}
+                            alt={development.asset_owner.name}
+                            fill
+                            sizes="160px"
+                            className="object-contain object-left"
+                          />
+                        </div>
                       )}
                       <div className="font-semibold text-primary-blue">{development.asset_owner.name}</div>
                       {development.asset_owner.headquarters && (
@@ -362,11 +370,15 @@ export default async function DevelopmentPage({ params }: PageProps) {
                   <Link href={`/operators/${development.operator.slug}`}>
                     <div className="hover:bg-gray-50 p-3 rounded-lg transition-colors">
                       {development.operator.logo_url && (
-                        <img
-                          src={development.operator.logo_url}
-                          alt={development.operator.name}
-                          className="h-12 mb-3 object-contain"
-                        />
+                        <div className="relative h-12 w-40 mb-3">
+                          <Image
+                            src={development.operator.logo_url}
+                            alt={development.operator.name}
+                            fill
+                            sizes="160px"
+                            className="object-contain object-left"
+                          />
+                        </div>
                       )}
                       <div className="font-semibold text-primary-blue">{development.operator.name}</div>
                       {development.operator.headquarters && (

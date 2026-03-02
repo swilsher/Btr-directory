@@ -6,6 +6,7 @@ import Footer from '@/components/layout/Footer';
 import Badge from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
 import InsightCard from '@/components/cards/InsightCard';
+import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
 import { createClient } from '@supabase/supabase-js';
 import { BlogPost, BlogTag, CONTENT_TYPE_LABELS } from '@/types/blog';
@@ -204,11 +205,14 @@ export default async function InsightDetailPage({ params }: PageProps) {
           <div className="max-w-4xl mx-auto">
             {/* Featured Image */}
             {post.featured_image_url && (
-              <div className="mb-8 rounded-lg overflow-hidden shadow-lg">
-                <img
+              <div className="mb-8 rounded-lg overflow-hidden shadow-lg relative aspect-[16/9]">
+                <Image
                   src={post.featured_image_url}
                   alt={post.title}
-                  className="w-full h-auto"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 768px"
+                  priority
+                  className="object-cover"
                 />
               </div>
             )}

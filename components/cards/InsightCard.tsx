@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
 import { BlogPost, CONTENT_TYPE_LABELS } from '@/types/blog';
@@ -35,10 +36,12 @@ export default function InsightCard({ post }: InsightCardProps) {
         {/* Image */}
         {post.featured_image_url && (
           <div className="relative h-48 bg-gray-200 rounded-t-lg overflow-hidden">
-            <img
+            <Image
               src={post.featured_image_url}
               alt={post.title}
-              className="w-full h-full object-cover"
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              className="object-cover"
             />
             {post.is_featured && (
               <div className="absolute top-3 right-3">

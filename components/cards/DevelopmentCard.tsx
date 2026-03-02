@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
 import { Development } from '@/types/database';
@@ -15,10 +16,12 @@ export default function DevelopmentCard({ development }: DevelopmentCardProps) {
       <Card className="h-full flex flex-col">
         {development.image_url && (
           <div className="relative h-48 bg-gray-200 rounded-t-lg overflow-hidden">
-            <img
+            <Image
               src={development.image_url}
               alt={development.name}
-              className="w-full h-full object-cover"
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              className="object-cover"
             />
           </div>
         )}

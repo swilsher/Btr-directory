@@ -7,6 +7,7 @@ import Button from '@/components/ui/Button';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { Operator, Development } from '@/types/database';
+import Image from 'next/image';
 import { MapPin, ExternalLink, Building2, Tag } from 'lucide-react';
 import { SITE_URL, SITE_NAME } from '@/lib/constants';
 import Breadcrumbs from '@/components/seo/Breadcrumbs';
@@ -111,11 +112,15 @@ export default async function OperatorDetailPage({ params }: PageProps) {
               <div className="flex-1">
                 {operator.logo_url && (
                   <div className="bg-white rounded-lg p-4 inline-block mb-4">
-                    <img
-                      src={operator.logo_url}
-                      alt={operator.name}
-                      className="h-16 object-contain"
-                    />
+                    <div className="relative h-16 w-48">
+                      <Image
+                        src={operator.logo_url}
+                        alt={operator.name}
+                        fill
+                        sizes="192px"
+                        className="object-contain"
+                      />
+                    </div>
                   </div>
                 )}
                 <h1 className="text-4xl font-semibold mb-2 tracking-normal">{operator.name}</h1>

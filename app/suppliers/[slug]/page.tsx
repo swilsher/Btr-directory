@@ -7,6 +7,7 @@ import Badge from '@/components/ui/Badge';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { Supplier } from '@/types/database';
+import Image from 'next/image';
 import { ExternalLink, Tag, Mail } from 'lucide-react';
 import Breadcrumbs from '@/components/seo/Breadcrumbs';
 
@@ -92,11 +93,15 @@ export default async function SupplierDetailPage({ params }: PageProps) {
               <div className="flex-1">
                 {supplier.logo_url && (
                   <div className="bg-white rounded-lg p-4 inline-block mb-4">
-                    <img
-                      src={supplier.logo_url}
-                      alt={supplier.name}
-                      className="h-16 object-contain"
-                    />
+                    <div className="relative h-16 w-48">
+                      <Image
+                        src={supplier.logo_url}
+                        alt={supplier.name}
+                        fill
+                        sizes="192px"
+                        className="object-contain"
+                      />
+                    </div>
                   </div>
                 )}
                 <div className="flex items-center gap-3 mb-2">
