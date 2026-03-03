@@ -129,10 +129,14 @@ export default async function HomePage() {
                       <div className="p-6">
                         <h3 className="text-xl font-semibold text-text-primary mb-3">{dev.name}</h3>
 
-                        {dev.area && (
+                        {(dev.city || dev.area) && (
                           <div className="flex items-start gap-2 mb-3 text-text-secondary">
                             <MapPin size={18} className="text-primary-blue flex-shrink-0 mt-0.5" />
-                            <span className="font-medium text-sm">{dev.area}</span>
+                            <span className="font-medium text-sm">
+                              {dev.area && dev.city && dev.area !== dev.city
+                                ? `${dev.area}, ${dev.city}`
+                                : dev.city || dev.area}
+                            </span>
                           </div>
                         )}
 

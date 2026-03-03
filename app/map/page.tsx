@@ -24,6 +24,7 @@ interface MapDevelopment {
   id: string;
   name: string;
   slug: string;
+  city?: string;
   area?: string;
   region?: string;
   status?: string;
@@ -67,7 +68,7 @@ export default function MapPage() {
       const { data, error: fetchError } = await supabase
         .from('developments')
         .select(`
-          id, name, slug, area, region, status, number_of_units,
+          id, name, slug, city, area, region, status, number_of_units,
           latitude, longitude, development_type, image_url,
           operator:operators(name, slug)
         `)
@@ -99,9 +100,10 @@ export default function MapPage() {
       if (searchTerm) {
         const term = searchTerm.toLowerCase();
         const nameMatch = dev.name?.toLowerCase().includes(term);
+        const cityMatch = dev.city?.toLowerCase().includes(term);
         const areaMatch = dev.area?.toLowerCase().includes(term);
         const operatorMatch = dev.operator?.name?.toLowerCase().includes(term);
-        if (!nameMatch && !areaMatch && !operatorMatch) return false;
+        if (!nameMatch && !cityMatch && !areaMatch && !operatorMatch) return false;
       }
 
       // Region filter

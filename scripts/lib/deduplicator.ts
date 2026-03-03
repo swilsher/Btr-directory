@@ -108,6 +108,7 @@ function mergeGroup(
 
   // Pick best value for each field
   const name = pickBestString(sorted.map(d => d.name))!;
+  const city = pickBestString(sorted.map(d => d.city));
   const area = pickBestString(sorted.map(d => d.area));
   const region = pickBestString(sorted.map(d => d.region));
   const postcode = pickBestString(sorted.map(d => d.postcode));
@@ -161,6 +162,7 @@ function mergeGroup(
     name,
     slug: '', // will be set by caller
     developmentType: devType,
+    city: city || '',
     area: area || '',
     region: region || '',
     postcode: postcode || '',

@@ -8,6 +8,7 @@ export interface Development {
   asset_owner_id?: string;
   operator_id?: string;
   area?: string;
+  city?: string;
   region?: string;
   postcode?: string;
   latitude?: number;

@@ -36,13 +36,13 @@ async function getDevelopment(slug: string): Promise<Development | null> {
 }
 
 async function getRelatedDevelopments(development: Development): Promise<Development[]> {
-  // Try same area first
-  if (development.area) {
+  // Try same city first
+  if (development.city) {
     const { data } = await supabase
       .from('developments')
       .select('*, asset_owner:asset_owners(*), operator:operators(*)')
       .eq('is_published', true)
-      .eq('area', development.area)
+      .eq('city', development.city)
       .neq('id', development.id)
       .limit(4);
 
@@ -85,17 +85,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const operatorText = development.operator ? ` operated by ${development.operator.name}` : '';
   const unitsText = development.number_of_units ? ` Features ${formatNumber(development.number_of_units)} units` : '';
 
-  const description = `${development.name} is a ${development.development_type?.toLowerCase()} build-to-rent development in ${development.area || 'the UK'}${operatorText}.${unitsText}${amenitiesText}.`;
+  const locationText = development.city || development.area || 'the UK';
+  const description = `${development.name} is a ${development.development_type?.toLowerCase()} build-to-rent development in ${locationText}${operatorText}.${unitsText}${amenitiesText}.`;
+  const titleLocation = development.city || development.area;
 
   return {
-    title: `${development.name}${development.area ? `, ${development.area}` : ''} | Build to Rent`,
+    title: `${development.name}${titleLocation ? `, ${titleLocation}` : ''} | Build to Rent`,
     description: description.substring(0, 155),
-    keywords: [`${development.name}`, `BTR ${development.area}`, `${development.development_type}`, 'build to rent UK', development.operator?.name || ''],
+    keywords: [`${development.name}`, `BTR ${locationText}`, `${development.development_type}`, 'build to rent UK', development.operator?.name || ''],
     alternates: {
       canonical: `${SITE_URL}/development/${slug}`,
     },
     openGraph: {
-      title: `${development.name}${development.area ? `, ${development.area}` : ''} | Build to Rent`,
+      title: `${development.name}${titleLocation ? `, ${titleLocation}` : ''} | Build to Rent`,
       description: description.substring(0, 155),
       url: `${SITE_URL}/development/${slug}`,
       siteName: SITE_NAME,
@@ -112,7 +114,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${development.name}${development.area ? `, ${development.area}` : ''} | Build to Rent`,
+      title: `${development.name}${titleLocation ? `, ${titleLocation}` : ''} | Build to Rent`,
       description: description.substring(0, 155),
       images: development.image_url ? [development.image_url] : [],
     },
@@ -147,6 +149,7 @@ export default async function DevelopmentPage({ params }: PageProps) {
   const placeSchema = developmentPlaceSchema({
     name: development.name,
     description: development.description,
+    city: development.city,
     area: development.area,
     region: development.region,
     latitude: development.latitude,
@@ -188,11 +191,14 @@ export default async function DevelopmentPage({ params }: PageProps) {
             <div className="flex items-start justify-between mb-4">
               <div>
                 <h1 className="text-4xl font-bold text-text-primary mb-2">{development.name}</h1>
-                {development.area && (
+                {(development.city || development.area) && (
                   <div className="flex items-center text-text-secondary mb-2">
                     <MapPin size={18} className="mr-2" />
-                    <span className="text-lg">{development.area}</span>
-                    {development.region && <span className="ml-2">• {development.region}</span>}
+                    <span className="text-lg">
+                      {[development.area, development.city, development.region]
+                        .filter((v, i, arr) => Boolean(v) && arr.indexOf(v) === i)
+                        .join(' • ')}
+                    </span>
                   </div>
                 )}
               </div>

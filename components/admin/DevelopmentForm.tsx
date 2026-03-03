@@ -5,6 +5,7 @@ import { supabase } from '@/lib/supabase';
 import { Development, Operator, AssetOwner } from '@/types/database';
 import { generateSlug } from '@/lib/utils';
 import { Autocomplete } from '@/components/ui/Autocomplete';
+import { postcodeToCity, postcodeToRegion, postcodeToBorough } from '@/lib/postcode-utils';
 import { Loader2, Upload, X, Star, Trash2, ArrowLeft, Save } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -43,6 +44,7 @@ interface FormData {
   development_type: 'Multifamily' | 'Single Family';
   operator_id: string | null;
   asset_owner_id: string | null;
+  city: string;
   area: string;
   region: string;
   postcode: string;
@@ -74,6 +76,7 @@ export default function DevelopmentForm({ development, isEdit = false }: Develop
     development_type: 'Multifamily',
     operator_id: null,
     asset_owner_id: null,
+    city: '',
     area: '',
     region: '',
     postcode: '',
@@ -97,6 +100,7 @@ export default function DevelopmentForm({ development, isEdit = false }: Develop
         development_type: development.development_type || 'Multifamily',
         operator_id: development.operator_id || null,
         asset_owner_id: development.asset_owner_id || null,
+        city: development.city || '',
         area: development.area || '',
         region: development.region || '',
         postcode: development.postcode || '',
@@ -197,6 +201,26 @@ export default function DevelopmentForm({ development, isEdit = false }: Develop
   const updateField = (field: keyof FormData, value: string | null) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
+
+  // Auto-populate city/region/area from postcode
+  const handlePostcodeChange = useCallback((postcode: string) => {
+    setFormData(prev => {
+      const updated = { ...prev, postcode };
+      const trimmed = postcode.trim();
+      if (trimmed.length >= 2) {
+        const city = postcodeToCity(trimmed);
+        const region = postcodeToRegion(trimmed);
+        if (city && !prev.city) updated.city = city;
+        if (region && !prev.region) updated.region = region;
+        // For London postcodes, auto-fill borough
+        if (city === 'London' && trimmed.length >= 3 && !prev.area) {
+          const borough = postcodeToBorough(trimmed);
+          if (borough) updated.area = borough;
+        }
+      }
+      return updated;
+    });
+  }, []);
 
   // Image upload handler
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -388,6 +412,7 @@ export default function DevelopmentForm({ development, isEdit = false }: Develop
         development_type: formData.development_type,
         operator_id: formData.operator_id || null,
         asset_owner_id: formData.asset_owner_id || null,
+        city: formData.city.trim() || null,
         area: formData.area.trim() || null,
         region: formData.region || null,
         postcode: formData.postcode.trim() || null,
@@ -553,12 +578,32 @@ export default function DevelopmentForm({ development, isEdit = false }: Develop
               <h3 className="text-sm font-semibold text-gray-800 mb-4 uppercase tracking-wider">Location</h3>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">City / Area</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Postcode</label>
+                  <input
+                    type="text"
+                    value={formData.postcode}
+                    onChange={(e) => handlePostcodeChange(e.target.value)}
+                    placeholder="e.g. M1 5QP — auto-fills city & region"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-blue focus:border-primary-blue"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">City</label>
+                  <input
+                    type="text"
+                    value={formData.city}
+                    onChange={(e) => updateField('city', e.target.value)}
+                    placeholder="e.g. Manchester, London"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-blue focus:border-primary-blue"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Borough / Sub-area <span className="text-gray-400 font-normal">(optional)</span></label>
                   <input
                     type="text"
                     value={formData.area}
                     onChange={(e) => updateField('area', e.target.value)}
-                    placeholder="e.g. Manchester"
+                    placeholder="e.g. Hackney, Salford"
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-blue focus:border-primary-blue"
                   />
                 </div>
@@ -574,16 +619,6 @@ export default function DevelopmentForm({ development, isEdit = false }: Develop
                       <option key={r} value={r}>{r}</option>
                     ))}
                   </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Postcode</label>
-                  <input
-                    type="text"
-                    value={formData.postcode}
-                    onChange={(e) => updateField('postcode', e.target.value)}
-                    placeholder="e.g. M1 5QP"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-blue focus:border-primary-blue"
-                  />
                 </div>
                 <div className="grid grid-cols-2 gap-2">
                   <div>

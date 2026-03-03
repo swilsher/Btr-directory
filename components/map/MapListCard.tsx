@@ -7,6 +7,7 @@ interface MapDevelopment {
   id: string;
   name: string;
   slug: string;
+  city?: string;
   area?: string;
   region?: string;
   status?: string;
@@ -48,10 +49,13 @@ export default function MapListCard({ development, isSelected, onSelect, onHover
       </div>
 
       {/* Location */}
-      {development.area && (
+      {(development.city || development.area) && (
         <div className="flex items-center text-text-secondary text-xs mb-1.5">
           <MapPin size={11} className="mr-1 flex-shrink-0" />
-          <span className="truncate">{development.area}{development.region ? `, ${development.region}` : ''}</span>
+          <span className="truncate">
+            {[development.area, development.city].filter((v, i, arr) => Boolean(v) && arr.indexOf(v) === i).join(', ')}
+            {development.region ? `, ${development.region}` : ''}
+          </span>
         </div>
       )}
 

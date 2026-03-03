@@ -50,6 +50,7 @@ export function breadcrumbSchema(items: { name: string; url: string }[]) {
 interface DevelopmentSchemaInput {
   name: string;
   description?: string | null;
+  city?: string | null;
   area?: string | null;
   region?: string | null;
   latitude?: number | null;
@@ -76,10 +77,11 @@ export function developmentPlaceSchema(dev: DevelopmentSchemaInput) {
     schema.image = dev.image_url;
   }
 
-  if (dev.area || dev.region) {
+  if (dev.city || dev.area || dev.region) {
     schema.address = {
       '@type': 'PostalAddress',
-      ...(dev.area && { addressLocality: dev.area }),
+      ...(dev.city && { addressLocality: dev.city }),
+      ...(dev.area && !dev.city && { addressLocality: dev.area }),
       ...(dev.region && { addressRegion: dev.region }),
       addressCountry: 'GB',
     };

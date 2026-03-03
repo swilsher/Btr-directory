@@ -19,7 +19,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Development pages
   const { data: developments } = await supabase
     .from('developments')
-    .select('slug, updated_at, area')
+    .select('slug, updated_at, city, area')
     .eq('is_published', true);
 
   const developmentPages: MetadataRoute.Sitemap = (developments || []).map((dev) => ({
@@ -69,17 +69,35 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.5,
   }));
 
-  // City pages
-  const uniqueAreas = new Set((developments || []).map((d) => d.area).filter(Boolean));
+  // City pages (from city column)
+  const uniqueCities = new Set((developments || []).map((d) => d.city).filter(Boolean));
   const cityPages: MetadataRoute.Sitemap = [
     { url: `${SITE_URL}/cities`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
-    ...Array.from(uniqueAreas).map((area) => ({
-      url: `${SITE_URL}/cities/${generateSlug(area!)}`,
+    ...Array.from(uniqueCities).map((city) => ({
+      url: `${SITE_URL}/cities/${generateSlug(city!)}`,
       lastModified: new Date(),
       changeFrequency: 'weekly' as const,
       priority: 0.7,
     })),
   ];
+
+  // Area sub-pages (city + area combinations)
+  const cityAreaPairs = new Set<string>();
+  const areaPages: MetadataRoute.Sitemap = [];
+  (developments || []).forEach((dev) => {
+    if (dev.city && dev.area) {
+      const key = `${dev.city}|${dev.area}`;
+      if (!cityAreaPairs.has(key)) {
+        cityAreaPairs.add(key);
+        areaPages.push({
+          url: `${SITE_URL}/cities/${generateSlug(dev.city)}/${generateSlug(dev.area)}`,
+          lastModified: new Date(),
+          changeFrequency: 'weekly' as const,
+          priority: 0.6,
+        });
+      }
+    }
+  });
 
   return [
     ...staticPages,
@@ -89,5 +107,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...insightPages,
     ...assetOwnerPages,
     ...cityPages,
+    ...areaPages,
   ];
 }

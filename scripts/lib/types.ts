@@ -25,6 +25,7 @@ export interface PartialDevelopment {
   name: string;
   slug?: string;
   developmentType?: DevelopmentType;
+  city?: string;
   area?: string;
   region?: string;
   postcode?: string;
@@ -54,6 +55,7 @@ export interface ExtractedDevelopment {
   name: string;
   slug: string;
   developmentType: DevelopmentType;
+  city: string;
   area: string;
   region: string;
   postcode: string;

@@ -24,6 +24,7 @@ export default function FilterableDevelopmentList({ developments, showSubCategor
       filtered = filtered.filter(
         (dev) =>
           dev.name.toLowerCase().includes(searchLower) ||
+          dev.city?.toLowerCase().includes(searchLower) ||
           dev.area?.toLowerCase().includes(searchLower) ||
           dev.description?.toLowerCase().includes(searchLower)
       );

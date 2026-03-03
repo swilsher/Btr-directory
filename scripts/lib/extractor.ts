@@ -1,7 +1,7 @@
 import * as cheerio from 'cheerio';
 import type { PartialDevelopment, DevelopmentStatus, DevelopmentType, SourceType } from './types.js';
 import type { ScrapedPage } from './types.js';
-import { postcodeToRegion, cityToRegion } from './postcode-regions.js';
+import { postcodeToRegion, postcodeToCity, postcodeToBorough, cityToRegion } from './postcode-regions.js';
 import { cleanText } from './utils.js';
 
 // --- Regex patterns ---
@@ -116,11 +116,15 @@ function extractFromPortfolioPage(
         if (name && name.length > 2 && name.length < 100) {
           const fullUrl = link ? resolveUrl(link, pageUrl) : undefined;
           const postcode = extractFirstPostcode(locationText + ' ' + name);
+          const city = postcode ? postcodeToCity(postcode) : undefined;
           const region = postcode ? postcodeToRegion(postcode) : cityToRegion(locationText);
+          // For London, derive borough from postcode
+          const area = (city === 'London' && postcode) ? postcodeToBorough(postcode) : (locationText || undefined);
 
           developments.push({
             name,
-            area: locationText || undefined,
+            city: city || undefined,
+            area,
             postcode: postcode || undefined,
             region: region || undefined,
             websiteUrl: fullUrl,
@@ -196,10 +200,15 @@ function extractSingleDevelopment(
 
   // Extract fields
   const postcode = extractFirstPostcode(bodyText);
-  const area = extractArea($, bodyText);
+  const extractedArea = extractArea($, bodyText);
+  const city = postcode ? postcodeToCity(postcode) : undefined;
   const region = postcode
     ? postcodeToRegion(postcode)
-    : area ? cityToRegion(area) : undefined;
+    : extractedArea ? cityToRegion(extractedArea) : undefined;
+  // For London, use postcode-derived borough; otherwise keep extracted area
+  const area = (city === 'London' && postcode)
+    ? (postcodeToBorough(postcode) || extractedArea)
+    : extractedArea;
   const numberOfUnits = extractUnitCount(bodyText);
   const status = inferStatus(bodyText);
   const completionDate = extractCompletionDate(bodyText);
@@ -211,6 +220,7 @@ function extractSingleDevelopment(
 
   return {
     name,
+    city: city || undefined,
     area,
     region,
     postcode: postcode || undefined,

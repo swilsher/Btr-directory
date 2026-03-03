@@ -43,6 +43,7 @@ CREATE TABLE developments (
 
   -- Location
   area TEXT,
+  city TEXT,
   region TEXT,
   postcode TEXT,
   latitude DECIMAL(10, 8),
@@ -159,6 +160,7 @@ CREATE TABLE newsletter_signups (
 CREATE INDEX idx_developments_type ON developments(development_type);
 CREATE INDEX idx_developments_status ON developments(status);
 CREATE INDEX idx_developments_area ON developments(area);
+CREATE INDEX idx_developments_city ON developments(city);
 CREATE INDEX idx_developments_region ON developments(region);
 CREATE INDEX idx_developments_published ON developments(is_published);
 CREATE INDEX idx_developments_featured ON developments(is_featured);
@@ -169,7 +171,7 @@ CREATE INDEX idx_correction_requests_status ON correction_requests(status);
 CREATE INDEX idx_supplier_submissions_status ON supplier_submissions(status);
 
 -- Full text search indexes
-CREATE INDEX idx_developments_search ON developments USING gin(to_tsvector('english', name || ' ' || COALESCE(description, '') || ' ' || COALESCE(area, '')));
+CREATE INDEX idx_developments_search ON developments USING gin(to_tsvector('english', name || ' ' || COALESCE(description, '') || ' ' || COALESCE(city, '') || ' ' || COALESCE(area, '')));
 CREATE INDEX idx_operators_search ON operators USING gin(to_tsvector('english', name || ' ' || COALESCE(description, '')));
 CREATE INDEX idx_asset_owners_search ON asset_owners USING gin(to_tsvector('english', name || ' ' || COALESCE(description, '')));
 CREATE INDEX idx_suppliers_search ON suppliers USING gin(to_tsvector('english', name || ' ' || COALESCE(description, '')));

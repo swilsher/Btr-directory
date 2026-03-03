@@ -82,7 +82,7 @@ export function generateSQL(
 
     lines.push(`  INSERT INTO developments (`);
     lines.push(`    name, slug, development_type, operator_id, asset_owner_id,`);
-    lines.push(`    area, region, postcode,`);
+    lines.push(`    city, area, region, postcode,`);
     lines.push(`    number_of_units, status, completion_date,`);
     lines.push(`    description, website_url,`);
     lines.push(`    amenity_gym, amenity_pool, amenity_coworking, amenity_concierge,`);
@@ -93,7 +93,7 @@ export function generateSQL(
     lines.push(`  )`);
     lines.push(`  SELECT`);
     lines.push(`    ${sqlString(dev.name)}, ${sqlString(dev.slug)}, ${sqlString(dev.developmentType)}, op_id, ${sameOwner ? 'op_id' : 'ao_id'},`);
-    lines.push(`    ${sqlString(dev.area)}, ${sqlString(dev.region)}, ${sqlString(dev.postcode)},`);
+    lines.push(`    ${sqlString(dev.city)}, ${sqlString(dev.area)}, ${sqlString(dev.region)}, ${sqlString(dev.postcode)},`);
     lines.push(`    ${sqlInt(dev.numberOfUnits)}, ${sqlString(dev.status)}, ${sqlDate(dev.completionDate)},`);
     lines.push(`    ${sqlString(dev.description.substring(0, 500))}, ${sqlString(dev.websiteUrl)},`);
     lines.push(`    ${sqlBool(dev.amenities.amenity_gym)}, ${sqlBool(dev.amenities.amenity_pool)}, ${sqlBool(dev.amenities.amenity_coworking)}, ${sqlBool(dev.amenities.amenity_concierge)},`);
@@ -116,7 +116,7 @@ export function generateSQL(
   lines.push(`-- ============================================================================`);
   for (const dev of included) {
     const flag = dev.confidence.level === 'MEDIUM' ? ' [FLAGGED FOR REVIEW]' : '';
-    lines.push(`-- ${dev.confidence.level}: ${dev.name} (${dev.area || 'unknown area'})${flag}`);
+    lines.push(`-- ${dev.confidence.level}: ${dev.name} (${dev.city || dev.area || 'unknown location'})${flag}`);
   }
   if (excluded.length > 0) {
     lines.push(`--`);

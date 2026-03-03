@@ -8,6 +8,7 @@ interface MapDevelopment {
   id: string;
   name: string;
   slug: string;
+  city?: string;
   area?: string;
   status?: string;
   number_of_units?: number;
@@ -35,10 +36,10 @@ export default function MapPopupCard({ development }: MapPopupCardProps) {
       </div>
 
       {/* Location */}
-      {development.area && (
+      {(development.city || development.area) && (
         <div className="flex items-center text-text-secondary text-xs mb-2">
           <MapPin size={12} className="mr-1 flex-shrink-0" />
-          <span>{development.area}</span>
+          <span>{[development.area, development.city].filter((v, i, arr) => Boolean(v) && arr.indexOf(v) === i).join(', ')}</span>
         </div>
       )}
 

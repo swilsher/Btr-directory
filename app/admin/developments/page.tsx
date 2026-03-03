@@ -283,7 +283,12 @@ export default function AdminDevelopmentsPage() {
                     </td>
                     <td className="px-6 py-4">
                       <div>
-                        <span className="text-sm text-gray-900">{dev.area || '-'}</span>
+                        <span className="text-sm text-gray-900">
+                          {dev.city || dev.area || '-'}
+                        </span>
+                        {dev.city && dev.area && (
+                          <p className="text-xs text-gray-500">{dev.area}</p>
+                        )}
                         {dev.region && (
                           <p className="text-xs text-gray-500">{dev.region}</p>
                         )}

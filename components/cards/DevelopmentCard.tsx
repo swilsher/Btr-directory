@@ -33,10 +33,14 @@ export default function DevelopmentCard({ development }: DevelopmentCardProps) {
             </Badge>
           </div>
 
-          {development.area && (
+          {(development.city || development.area) && (
             <div className="flex items-center text-text-secondary mb-3">
               <MapPin size={16} className="mr-1 flex-shrink-0" />
-              <span className="text-sm">{development.area}</span>
+              <span className="text-sm">
+                {development.area && development.city && development.area !== development.city
+                  ? `${development.area}, ${development.city}`
+                  : development.city || development.area}
+              </span>
             </div>
           )}
 
