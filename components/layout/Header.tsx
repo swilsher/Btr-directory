@@ -13,7 +13,7 @@ export default function Header() {
     // { name: 'Asset Owners', href: '/asset-owners' }, // Temporarily hidden
     { name: 'Operators', href: '/operators' },
     { name: 'Suppliers', href: '/suppliers' },
-    { name: 'Cities', href: '/cities' },
+    // { name: 'Cities', href: '/cities' }, // Temporarily hidden - data needs fixing
     { name: 'Map', href: '/map' },
     { name: 'Insights', href: '/insights' },
   ];
